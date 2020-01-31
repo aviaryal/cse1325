@@ -11,12 +11,13 @@ Color::Color(int r,int g,int b):red{r},green{g},blue{b}
 }
 std::string Color::to_string()
 {
-	return std::to_string(red)+ ";" + std::to_string(green) + ";" +std::to_string(blue);
+	return "("+std::to_string(red)+ "," + std::to_string(green) + "," +std::to_string(blue)+")";
 }
 
 std::string Color::colorize(std::string message)
 {
-	return "\033[38;2;" + to_string() +"m"+message+"\033[0m";
+	std::string command = std::to_string(red)+ ";" + std::to_string(green) + ";" +std::to_string(blue); 
+	return "\033[38;2;" + command +"m"+message+"\033[0m";
 
 }
 
