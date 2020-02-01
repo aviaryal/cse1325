@@ -10,7 +10,7 @@ int main()
 	std::cin>>red>>green>>blue;
 	Color user{red,green,blue};
 	std::cout<<user.colorize(user.to_string())<<std::endl;
-	std::cout<<"THe value is "<< user.compare(test)<<std::endl;
+	//std::cout<<"THe value is "<< user.compare(test)<<std::endl;
 	return 0;
 
 }
