@@ -1,27 +1,18 @@
-#Avinash Aryal
-SRC1 = main.cpp
-SRC2 = color.cpp 
-OBJ1 = $(SRC1:.cpp=.o)
-OBJ2 = $(SRC2:.cpp=.o)
-EXE = $(SRC1:.cpp=.e)
+#avinash aryal 1001727418
 
-HFILES = color.h
+CXXXFLAGS = --std = c++17
 
-CFLAGS = -g -std=c++17
+all: main
 
-all : $(EXE)
- 
-$(EXE): $(OBJ1) $(OBJ2) 
-	g++ $(CFLAGS) $(OBJ1) $(OBJ2) -o $(EXE) 
-
-$(OBJ1) : $(SRC1) $(HFILES)
-	g++ -c $(CFLAGS) $(SRC1) -o $(OBJ1)
-	
-$(OBJ2) : $(SRC2) $(HFILES)
-	g++ -c $(CFLAGS) $(SRC2) -o $(OBJ2) 
-
+main: main.o color.o
+	$(CXX) $(CXXFLAGS) main.o color.o -o main
+main.o: main.cpp 
+	$(CXX) $(CXXFLAGS) -c main.cpp -o main.o
+color.o: color.cpp 
+	$(CXX) $(CXXFLAGS) -c color.cpp -o color.o
+color.gch: color.h
+	$(CXX) $(CXXFLAGS) -c color.h -o color.gch
 clean:
-	rm -f *.e *.o *.gch ~* a.out main color
-
+	rm -f *.o *.gch *~ main
 
 
