@@ -37,9 +37,7 @@ bool Color::operator==(const Color &rhs) const
 }
 bool Color::operator<(const Color &rhs) const
 {
-	if(this->magnitude() < rhs.magnitude())
-		return  true;
-	else false;
+	return this->compare(rhs);
 }
 bool Color::operator!=(const Color &rhs) const
 {
@@ -61,10 +59,12 @@ bool Color::operator<=(const Color &rhs) const
 
 bool Color::compare(const Color& rhs) const
 { 
-    if(this->magnitude() > rhs.magnitude())
-		return  false;
-    if(this->magnitude() <= rhs.magnitude())
+	if(this->magnitude() < rhs.magnitude())
 		return true;
+	else 
+		return false;
+   
+    
     
 }
 
