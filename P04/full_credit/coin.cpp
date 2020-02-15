@@ -4,10 +4,7 @@
 
 Coin::Coin(Coin_size size,Year year):_size{size},_year{year}, notes{NULL}
 {
-  if((_size!=Coin_size::PENNY &&_size!=Coin_size::NICKEL &&_size!=Coin_size::DIME&&_size!=Coin_size::QUATER) )
-  {
-    throw std:: runtime_error{"BAD COIN"};
-  }
+
   LOG("Coin::Coin")
 
 }
@@ -40,8 +37,34 @@ void Coin::add_note(std::string s)
     *notes=s;
   }
 }
+
+std::ostream &operator<<(std::ostream &ost, const Coin_size &coin_size)
+{
+
+  switch(coin_size)
+  {
+    case Coin_size::PENNY:
+      return ost<<"Penny";
+      break;
+    case Coin_size::NICKEL:
+      return ost<<"Nickel";
+      break;
+    case Coin_size::DIME:
+      return ost<<"Dime";
+      break;
+    case Coin_size::QUATER:
+      return ost<<"Quater";
+      break;
+    default:
+      throw std:: runtime_error{"BAD COIN"};
+      std::exit(-1);
+
+  }
+}
 std::ostream &operator<<(std::ostream &ost, const Coin &coin)
 {
-  ost<<*(coin.notes);
+  ost<<coin._year<<"\t"<<coin._size<<"\n"<<*(coin.notes);
+  //ost<<coin._size;
+  //ost<<*(coin.notes);
   return ost;
 }

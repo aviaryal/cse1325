@@ -5,7 +5,7 @@
 #include <string>
 typedef int Year;
 
-enum class Coin_size{PENNY, NICKEL, DIME, QUATER};
+enum class Coin_size{PENNY, NICKEL, DIME, QUATER,DOLLAR};
 class Coin
 {
   public:
