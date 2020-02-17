@@ -5,13 +5,13 @@
 Coin::Coin(Coin_size size,Year year):_size{size},_year{year}, notes{NULL}
 {
 
-  LOG("Coin::Coin")
+  LOG("Coin::Coin");
 
 }
 Coin:: Coin(const Coin &rhs):_year{rhs._year}, _size{rhs._size},notes{new std::string}
 {
   this->notes= rhs.notes;
-  LOG("Coin::Coin copy constructor")
+  LOG("Coin::Coin copy constructor");
 }
 Coin &Coin::operator=(const Coin &coin)
 {
@@ -19,7 +19,7 @@ Coin &Coin::operator=(const Coin &coin)
   this->_size=coin._size;
   notes=new std::string;
   *notes=*(coin.notes);
-  LOG("Coin::Coin operator=")
+  LOG("Coin::Coin operator=");
 }
 Coin:: ~Coin()
 {
