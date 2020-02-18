@@ -10,7 +10,7 @@ Coin::Coin(Coin_size size,Year year):_size{size},_year{year}, notes{NULL}
 }
 Coin:: Coin(const Coin &rhs):_year{rhs._year}, _size{rhs._size},notes{new std::string}
 {
-  this->notes= rhs.notes;
+  *(this->notes)= *(rhs.notes);
   LOG("Coin::Coin copy constructor");
 }
 Coin &Coin::operator=(const Coin &coin)
@@ -34,7 +34,7 @@ void Coin::add_note(std::string s)
   }
   else
   {
-    *notes=s;
+    *notes+=s;
   }
 }
 
