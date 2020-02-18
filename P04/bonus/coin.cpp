@@ -36,7 +36,7 @@ void Coin::add_note(std::string s)
   }
   else
   {
-    *notes=s;
+    *notes+=s;
   }
 }
 
