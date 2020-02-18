@@ -1,8 +1,6 @@
 #include "coin.h"
 
 int main() {
-
-
     Coin c1{Coin_size::PENNY,  2006};
     c1.add_note("This is a 2006 penny");
 
@@ -19,5 +17,4 @@ int main() {
     std::cout << "c1: " << c1 << "\n\n";
     std::cout << "c2: " << c2 << "\n\n";
     std::cout << "cc: " << cc << "\n\n";
-
 }

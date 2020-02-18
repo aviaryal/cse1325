@@ -24,6 +24,7 @@ Coin &Coin::operator=(const Coin &coin)
 Coin:: ~Coin()
 {
     delete notes;
+    LOG("~Coin");
 }
 void Coin::add_note(std::string s)
 {
