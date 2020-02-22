@@ -1,7 +1,7 @@
 #ifndef __taxfree__h
 #define __taxfree__h
 #include "product.h"
-class Taxfree : Product
+class Taxfree : public Product
 {
   public:
     Taxfree(std::string name, double cost);

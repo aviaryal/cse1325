@@ -10,8 +10,10 @@ OBJ4 = $(SRC4:.cpp=.o)
 EXE = $(SRC1:.cpp=.e)
 
 HFILES = product.h taxed.h taxfree.h
-DEBUGS=-g
 CFLAGS =  --std=c++17
+debug: CFLAGS += -g
+debug:$(EXE)
+
 
 all : $(EXE)
 

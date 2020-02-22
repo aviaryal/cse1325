@@ -1,27 +1,17 @@
 #Avinash Aryal
-SRC1 = main.cpp
-SRC2 = color.cpp 
-OBJ1 = $(SRC1:.cpp=.o)
-OBJ2 = $(SRC2:.cpp=.o)
-EXE = $(SRC1:.cpp=.e)
+CXXFLAGS+= --std=c++17
 
-HFILES = color.h
-DEBUGS=-g
-CFLAGS =  --std=c++17
-
-all : $(EXE)
- 
-$(EXE): $(OBJ1) $(OBJ2) 
-	g++ $(CFLAGS) $(OBJ1) $(OBJ2) -o $(EXE) 
-
-$(OBJ1) : $(SRC1) $(HFILES)
-	g++ -c $(CFLAGS) $(SRC1) -o $(OBJ1)
-	
-$(OBJ2) : $(SRC2) $(HFILES)
-	g++ -c $(CFLAGS) $(SRC2) -o $(OBJ2) 
+all=test
+test: test.o coin.o *h
+	$(CXX) $(CXXFLAGS) test.o coin.o -o test
+test.o: test.cpp *.h
+	$(CXX) $(CXXFLAGS) -c test.cpp -o test.o
+coin.o: coin.cpp *.h
+	$(CXX) $(CXXFLAGS) -c coin.cpp -o coin.o
 
 clean:
 	rm -f *.e *.o *.gch ~* a.out main color
-
-
-
+logger:
+	$(CXX) $(CXXFLAGS) -DLOGGER -c test.cpp -o test.o
+	$(CXX) $(CXXFLAGS) -DLOGGER -c coin.cpp -o coin.o
+	$(CXX) $(CXXFLAGS) -DLOGGER test.o coin.o -o test

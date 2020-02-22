@@ -14,7 +14,12 @@ Product::~Product()
 
 void Product::set_quantity(int quantity)
 {
-  _quantity=quantity;
+  if(quantity<0)
+  {
+    throw std::runtime_error{"quantity can't be negative"};
+  }
+  else
+    _quantity=quantity;
 }
 double Product:: price() const
 {
@@ -29,6 +34,6 @@ std::ostream &operator<<(std::ostream &ost , const Product product)
   }
   else if(product._quantity==0)
   {
-    ost<<product._name<<" ("<<std::setprecision(2)<<std::fixed<<product._cost<<")";
+    ost<<product._name<<" $"<<std::setprecision(2)<<std::fixed<<product._cost;
   }
 }

@@ -1,5 +1,5 @@
 #include "taxed.h"
-//static double tax;
+double Taxed::tax;
 Taxed::Taxed(std::string name, double cost): Product(name,cost)
 {
 
