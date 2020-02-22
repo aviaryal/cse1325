@@ -26,7 +26,7 @@ int main()
   try
   {
     taxeditems={Taxed("Ice Cream",4.99), Taxed("Coke", 1.99), Taxed("Chips", 2.99)};
-    taxfreeitems={Taxfree("Milk",2.85), Taxfree("Bread",1.79),Taxfree("Water Jar", 6.50)};
+    taxfreeitems={Taxfree("Milk",2.85), Taxfree("Bread",1.79),Taxfree("Water Jar", 6.50),Taxfree("Cheese", 0.99)};
   }
   catch (std::runtime_error e)
   {
@@ -48,7 +48,7 @@ int main()
       std::cout<<j<<")"<<taxfreeitems.at(j)<<std::endl;
     }
 
-    for(int i=0, j=taxeditems.size();i<taxeditems.size();i++,j++)
+    for(int i=0, j=taxfreeitems.size();i<taxeditems.size();i++,j++)
     {
       taxeditems.at(i).set_quantity(0);
       std::cout<<j<<")"<<taxeditems.at(i)<<std::endl;
@@ -80,7 +80,7 @@ int main()
     {
       std::cerr<<"Number out of range"<<std::endl;
     }
-    if(itemno<(taxeditems.size()+taxeditems.size()) && quantity!=0)
+    if(itemno<(taxeditems.size()+taxfreeitems.size()) && quantity!=0)
     {
       try
       {
@@ -108,43 +108,50 @@ int main()
         }
         else if(itemno==3)
         {
-          taxeditems.at(itemno-taxeditems.size()).set_quantity(quantity);
-          taxeditems.at(itemno-taxeditems.size()).price();
-          total+=taxeditems.at(itemno-taxeditems.size()).price();
-
+          taxfreeitems.at(itemno).set_quantity(quantity);
+          taxfreeitems.at(itemno).price();
+          total+=taxfreeitems.at(itemno).price();
         }
         else if(itemno==4)
         {
-          taxeditems.at(itemno-taxeditems.size()).set_quantity(quantity);
-          taxeditems.at(itemno-taxeditems.size()).price();
-          total+=taxeditems.at(itemno-taxeditems.size()).price();
+          taxeditems.at(itemno-taxfreeitems.size()).set_quantity(quantity);
+          taxeditems.at(itemno-taxfreeitems.size()).price();
+          total+=taxeditems.at(itemno-taxfreeitems.size()).price();
 
         }
         else if(itemno==5)
         {
-          taxeditems.at(itemno-taxeditems.size()).set_quantity(quantity);
-          taxeditems.at(itemno-taxeditems.size()).price();
-          total+=taxeditems.at(itemno-taxeditems.size()).price();
+          taxeditems.at(itemno-taxfreeitems.size()).set_quantity(quantity);
+          taxeditems.at(itemno-taxfreeitems.size()).price();
+          total+=taxeditems.at(itemno-taxfreeitems.size()).price();
+
+        }
+        else if(itemno==6)
+        {
+          taxeditems.at(itemno-taxfreeitems.size()).set_quantity(quantity);
+          taxeditems.at(itemno-taxfreeitems.size()).price();
+          total+=taxeditems.at(itemno-taxfreeitems.size()).price();
 
         }
         list.push_back(itemno);
         quantityno.push_back(quantity);
-        std::cout<<"Current order"<<std::endl;
+        std::cout<<"\nCurrent order\n"<<std::endl;
 
         for(int i=0;i<list.size();i++)
         {
-          if(list.at(i)==0 || list.at(i)==1 || list.at(i)==2)
+          if(list.at(i)==0 || list.at(i)==1 || list.at(i)==2 ||list.at(i)==3)
           {
-            taxfreeitems.at(i).set_quantity(quantityno.at(i));
+            taxfreeitems.at(list.at(i)).set_quantity(quantityno.at(i));
             std::cout<<taxfreeitems.at(list.at(i))<<std::endl;
           }
-          else if(list.at(i)==3 || list.at(i)==4 || list.at(i)==5)
+          else if(list.at(i)==4 || list.at(i)==5 || list.at(i)==6)
           {
-            taxeditems.at(i).set_quantity(quantityno.at(i));
-            std::cout<<taxeditems.at(list.at(i)-taxeditems.size())<<std::endl;
+            taxeditems.at(list.at(i)-taxfreeitems.size()).set_quantity(quantityno.at(i));
+            std::cout<<taxeditems.at(list.at(i)-taxfreeitems.size())<<std::endl;
           }
         }
-        std::cout<<"Total: $"<<total<<std::endl;
+
+        std::cout<<"\nTotal: $"<<total<<"\n"<<std::endl;
 
 
       }
