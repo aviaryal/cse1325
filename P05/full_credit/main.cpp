@@ -164,7 +164,7 @@ int main()
         std::cerr<<"Invalid range "<<std::endl;
       }
     }
-    else if(itemno>(taxeditems.size()+taxeditems.size()))
+    else if(itemno>(taxeditems.size()+taxfreeitems.size()))
     {
       std::cout<<"Invalid items"<<std::endl;
     }
