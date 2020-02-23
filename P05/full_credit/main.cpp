@@ -25,7 +25,7 @@ int main()
   std::vector<Taxfree> taxfreeitems;
   try
   {
-    taxeditems={Taxed("Ice Cream",4.99), Taxed("Coke", 1.99), Taxed("Chips", 2.99)};
+    taxeditems={Taxed("Ice Cream",4.99), Taxed("Coke", 1.99), Taxed("Chips", 2.99), Taxed("Gum",1.29)};
     taxfreeitems={Taxfree("Milk",2.85), Taxfree("Bread",1.79),Taxfree("Water Jar", 6.50),Taxfree("Cheese", 0.99)};
   }
   catch (std::runtime_error e)
@@ -33,8 +33,8 @@ int main()
     std::cerr << e.what() << '\n';
   }
 
-  std::vector<int> list;
-  std::vector<int> quantityno;
+  std::vector<Taxed> customer_tax_list;
+  std::vector<Taxfree> customer_tax_freelist;
   Taxed::set_tax_rates(0.0825);
   int quantity, itemno;
   double total;
@@ -84,90 +84,45 @@ int main()
     {
       try
       {
-        if(itemno==0)
-        {
-
-          taxfreeitems.at(itemno).set_quantity(quantity);
-          taxfreeitems.at(itemno).price();
-          total+=taxfreeitems.at(itemno).price();
-
-        }
-        else if(itemno==1)
+        if(itemno>=0 && itemno<taxfreeitems.size())
         {
           taxfreeitems.at(itemno).set_quantity(quantity);
           taxfreeitems.at(itemno).price();
           total+=taxfreeitems.at(itemno).price();
-
+          customer_tax_freelist.push_back(taxfreeitems.at(itemno));
         }
-        else if(itemno==2)
-        {
-          taxfreeitems.at(itemno).set_quantity(quantity);
-          taxfreeitems.at(itemno).price();
-          total+=taxfreeitems.at(itemno).price();
-
-        }
-        else if(itemno==3)
-        {
-          taxfreeitems.at(itemno).set_quantity(quantity);
-          taxfreeitems.at(itemno).price();
-          total+=taxfreeitems.at(itemno).price();
-        }
-        else if(itemno==4)
+        else if(itemno>=taxfreeitems.size() && itemno<(taxeditems.size()+taxfreeitems.size()))
         {
           taxeditems.at(itemno-taxfreeitems.size()).set_quantity(quantity);
           taxeditems.at(itemno-taxfreeitems.size()).price();
           total+=taxeditems.at(itemno-taxfreeitems.size()).price();
-
+          customer_tax_list.push_back(taxeditems.at(itemno-taxfreeitems.size()));
         }
-        else if(itemno==5)
-        {
-          taxeditems.at(itemno-taxfreeitems.size()).set_quantity(quantity);
-          taxeditems.at(itemno-taxfreeitems.size()).price();
-          total+=taxeditems.at(itemno-taxfreeitems.size()).price();
-
-        }
-        else if(itemno==6)
-        {
-          taxeditems.at(itemno-taxfreeitems.size()).set_quantity(quantity);
-          taxeditems.at(itemno-taxfreeitems.size()).price();
-          total+=taxeditems.at(itemno-taxfreeitems.size()).price();
-
-        }
-        list.push_back(itemno);
-        quantityno.push_back(quantity);
-        std::cout<<"\nCurrent order\n"<<std::endl;
-
-        for(int i=0;i<list.size();i++)
-        {
-          if(list.at(i)==0 || list.at(i)==1 || list.at(i)==2 ||list.at(i)==3)
-          {
-            taxfreeitems.at(list.at(i)).set_quantity(quantityno.at(i));
-            std::cout<<taxfreeitems.at(list.at(i))<<std::endl;
-          }
-          else if(list.at(i)==4 || list.at(i)==5 || list.at(i)==6)
-          {
-            taxeditems.at(list.at(i)-taxfreeitems.size()).set_quantity(quantityno.at(i));
-            std::cout<<taxeditems.at(list.at(i)-taxfreeitems.size())<<std::endl;
-          }
-        }
-
-        std::cout<<"\nTotal: $"<<total<<"\n"<<std::endl;
-
-
       }
-      catch( std::runtime_error e)
+      catch(std::runtime_error e)
       {
         std::cerr << e.what() << std::endl;
       }
-      catch (std::out_of_range e)
+      catch(std::out_of_range e)
       {
         std::cerr<<"Invalid range "<<std::endl;
       }
+
     }
     else if(itemno>(taxeditems.size()+taxfreeitems.size()))
     {
       std::cout<<"Invalid items"<<std::endl;
     }
+    std::cout<<"\nCurrent order\n"<<std::endl;
+    for(int i=0;i<customer_tax_freelist.size();i++)
+    {
+      std::cout<<customer_tax_freelist.at(i)<<std::endl;
+    }
+    for(int i=0;i<customer_tax_list.size();i++)
+    {
+      std::cout<<customer_tax_list.at(i)<<std::endl;
+    }
+    std::cout<<"\nTotal: $"<<total<<"\n"<<std::endl;
 
   }
   while(quantity!=0);
