@@ -18,5 +18,6 @@ class Product
 
 
 };
+std::ostream &operator<<(std::ostream &ost, const Product proudct);
 
 #endif
