@@ -14,5 +14,9 @@ double Desktop::price()
 }
 std::ostream &operator<<(std::ostream &ost, Desktop &desktop)
 {
-  return ost<<std::to_string(desktop.price());
+  ost<<"Destop includes:\n";
+  for(auto v:desktop._options)
+    ost<<*v<<"\n";
+  ost<<"The total cost is: "<<std::to_string(desktop.price());
+  return ost;
 }

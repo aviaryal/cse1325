@@ -12,7 +12,8 @@ class Order
   public:
     Order(Customer &customer);
     virtual ~Order();
-    //is this void or int
+    Order(const Order &rhs);
+    Order &operator=(const Order &rhs);
     int add_product(Desktop &desktop);
     double price() const;
     friend std::ostream &operator<<(std::ostream &ost, const Order &order);

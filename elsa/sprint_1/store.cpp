@@ -14,8 +14,9 @@ Customer &Store::customer(int index)
 }
 void Store::add_option(Options &options)
 {
-  Options *option= &options;
-  _options.push_back(option);
+  Options *option= new Options{"default",0.00};
+  *option=options;
+  _options.push_back( option);
 }
 int Store::num_options()
 {
@@ -57,7 +58,7 @@ Desktop &Store::desktop(int desktop)
 {
   return _desktop.at(desktop);
 }
-Order  &Store::order(int order)
+Order &Store::order(int order)
 {
   return _orders.at(order);
 }
