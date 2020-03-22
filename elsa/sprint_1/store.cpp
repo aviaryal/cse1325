@@ -14,9 +14,7 @@ Customer &Store::customer(int index)
 }
 void Store::add_option(Options &options)
 {
-  Options *option= new Options{"default",0.00};
-  *option=options;
-  _options.push_back( option);
+  _options.push_back(new Options{options});
 }
 int Store::num_options()
 {

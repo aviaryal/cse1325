@@ -4,15 +4,18 @@ Options::Options(std::string name ,double cost):_name{name},_cost{cost}
 {
 
 }
+/*
 Options::Options(const Options &rhs):_name{rhs._name},_cost{rhs._cost}
 {
 
 }
+
 Options & Options::operator=(const Options &rhs)
 {
   this->_name=rhs._name;
   this->_cost=rhs._cost;
 }
+*/
 Options::~Options()
 {
 
