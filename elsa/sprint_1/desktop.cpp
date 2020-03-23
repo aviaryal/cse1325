@@ -1,7 +1,7 @@
 #include "desktop.h"
 void Desktop::addOption(Options &options)
 {
-  _options.push_back(new Options{options});
+  _options.push_back(&options);
 }
 double Desktop::price()
 {

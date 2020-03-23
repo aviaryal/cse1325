@@ -24,7 +24,7 @@ Order & Order::operator=(const Order &order)
 //is this void or int
 int Order::add_product(Desktop &desktop)
 {
-  _product.push_back(new Desktop{desktop});
+  _product.push_back(&desktop);
   return _product.size()-1;
 }
 double Order::price() const
