@@ -1,0 +1,90 @@
+P
+CPU: intel Core i7 2.0 GHz
+150
+P
+CPU: intel Core i5 2.5 GHz
+125
+P
+CPU: intel Core i3 3.0 GHz
+100
+P
+Graphic: Nvidia 1060 2GB
+200
+P
+Graphic: Nvidia 1050 150 2GB
+185
+P
+Graphic: Nvidia 1080t 4GB
+250
+P
+Ram: 4GB
+25
+P
+Ram: 8GB
+50
+P
+Ram: 16GB
+75
+P
+HardDisk: HD 1TB
+200
+P
+HardDisk: SSD 500GB
+300
+P
+HardDisk: HD 500GB
+150
+D
+1
+3
+6
+9
+-1
+D
+0
+5
+10
+8
+-1
+D
+2
+4
+6
+11
+-1
+C
+Avinash Aryal
+2522662908
+aviaryal100@gmail.com
+C
+Santosh Bhandari
+4694934121
+santosh@yahoo.com
+C
+Arjun Parajuli
+2321214232
+Parajuli@icloud.com
+C
+Tom Jerry
+2313241242
+tom&jerry@catoon.com
+O
+0
+0
+-1
+O
+0
+1
+-1
+O
+1
+1
+2
+-1
+O
+2
+1
+0
+-1
+o
+q
