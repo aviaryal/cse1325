@@ -1,9 +1,9 @@
-#ifndef __Mainwin__h
-#define __Mainwin__h
+#ifndef __mainwin__h
+#define __mainwin__h
 #include "store.h"
 #include <gtkmm.h>
 
-class Mainwin : public GTK::Window
+class Mainwin : public Gtk::Window
 {
   public:
     Mainwin();
