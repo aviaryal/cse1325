@@ -119,7 +119,7 @@ Mainwin::Mainwin():store{new Store}
   msg = Gtk::manage(new Gtk::Label());
   msg->set_hexpand(true);
   vbox->pack_start(*msg, Gtk::PACK_SHRINK, 0);
-  vbox->add(*msg);
+  //vbox->add(*msg);
 
 
 
@@ -210,11 +210,94 @@ void Mainwin::on_insert_peripheral_click()
 }
 void Mainwin::on_insert_desktop_click()
 {
+  std::vector<Gtk::CheckButton * >checkbutton;
+  std::ostringstream oss;
 
+  if(store->num_options()==0)
+    oss<<"No Options \n";
+  else
+  {
+    Gtk::Dialog *dialog_box= Gtk::manage(new Gtk::Dialog("Choose the options"));
+    for(int i=0;i <store->num_options();i++)
+    {
+      oss<< i << ") " << store->option(i) << "\n";
+      checkbutton.push_back(Gtk::manage(new Gtk::CheckButton{oss.str()}));
+      //dialog_box->add(*checkbutton(i));
+    }
+    /*
+    set_default_size(200,200);
+    set_title("Demo of CheckButton");
+    Gtk::VBox *vbox = Gtk::manage(new Gtk::VBox);
+    add(*vbox);
+    for(auto v : checkbutton)
+      vbox->pack_start(*v);
+    */
+    
+  }
+  set_data(oss.str());
+  /*
+  int desktop = store->new_desktop();
+  while(true)
+  {
+
+      //
+      std::ostringstream oss;
+      oss << store->desktop(desktop) << "\n\n";
+      oss<<"Following options are avilable.\n";
+      //set_data(oss.str());
+      on_view_peripheral_click();
+      if(store->num_options()==0)
+      {
+        on_view_peripheral_click();
+        break;
+      }
+      else
+      {
+        std::string option_number;
+        option_number=get_string("\nAdd which peripheral (-1 when done)? ");
+        int option=get_int(option_number);
+        if(option == -1 || option_number=="-1") break;
+        try {
+            store->add_option(option, desktop);
+        } catch(std::exception& e) {
+            std::cerr << "#### INVALID OPTION ####\n\n";
+        }
+        on_view_desktop_click();
+        }
+  }
+  */
 }
 void Mainwin::on_insert_order_click()
 {
+  std::ostringstream oss;
 
+  if(store->num_customers()==0)
+    on_view_customer_click();
+  else
+  {
+    std::string customer_no=get_string( "Customer? ");
+    int customer=get_int(customer_no);
+    int order = store->new_order(customer);
+
+    while(true) {
+
+        if(store->num_desktops()==0)
+        {
+          on_view_desktop_click();
+          break;
+        }
+        else
+        {
+          on_view_desktop_click();
+          std::string desktop_no=get_string("Desktop (-1 when done)? ");
+          int desktop=get_int(desktop_no);
+          //std::cin >> desktop; std::cin.ignore(32767, '\n');
+          if(desktop == -1 || desktop_no=="-1") break;
+          store->add_desktop(desktop, order);
+        }
+    }
+    set_msg("\n++++ Order Placed ++++ \n");
+  }
 }
 void Mainwin::on_insert_customer_click()
 {
