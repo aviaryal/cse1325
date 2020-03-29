@@ -229,14 +229,16 @@ void Mainwin::on_insert_desktop_click()
     Gtk::VBox vbox;
     for(auto v: checkbutton)
     {
-      vbox.pack_start(*v);
+      //vbox.pack_start(*v);
+      dialog.add(*v);
     }
     //vbox.show_all();
-    dialog.add(vbox);
+    //dialog.add(vbox);
   }
 
   set_data(oss.str());
   dialog.show_all();
+  dialog.run();
   */
 
   while(true)
@@ -262,12 +264,15 @@ void Mainwin::on_insert_desktop_click()
         int desktop = store->new_desktop();
         try {
             store->add_option(option, desktop);
+            set_msg("Added Desktop: ");
         } catch(std::exception& e) {
             std::cerr << "#### INVALID OPTION ####\n\n";
         }
 
         }
+
   }
+  //*/
   on_view_desktop_click();
 }
 void Mainwin::on_insert_order_click()
