@@ -109,7 +109,7 @@ Mainwin::Mainwin():store{new Store}
   // /////////////////////////// ////////////////////////////////////////////
   //    D I S P L A Y the data
   // Provide a text entry box to show the data
-  data = Gtk::manage(new Gtk::Label());
+  data = Gtk::manage(new Gtk::Label{"",Gtk::ALIGN_START,Gtk::ALIGN_START});
   data->set_hexpand(true);
   data->set_vexpand(true);
   vbox->add(*data);
@@ -210,6 +210,8 @@ void Mainwin::on_insert_peripheral_click()
 }
 void Mainwin::on_insert_desktop_click()
 {
+  /*
+  Gtk::Dialog dialog{"Options", *this};
   std::vector<Gtk::CheckButton * >checkbutton;
   std::ostringstream oss;
 
@@ -217,32 +219,32 @@ void Mainwin::on_insert_desktop_click()
     oss<<"No Options \n";
   else
   {
-    Gtk::Dialog *dialog_box= Gtk::manage(new Gtk::Dialog("Choose the options"));
     for(int i=0;i <store->num_options();i++)
     {
       oss<< i << ") " << store->option(i) << "\n";
+      //set_data(oss.str());
       checkbutton.push_back(Gtk::manage(new Gtk::CheckButton{oss.str()}));
-      //dialog_box->add(*checkbutton(i));
+
     }
-    /*
-    set_default_size(200,200);
-    set_title("Demo of CheckButton");
-    Gtk::VBox *vbox = Gtk::manage(new Gtk::VBox);
-    add(*vbox);
-    for(auto v : checkbutton)
-      vbox->pack_start(*v);
-    */
-    
+    Gtk::VBox vbox;
+    for(auto v: checkbutton)
+    {
+      vbox.pack_start(*v);
+    }
+    //vbox.show_all();
+    dialog.add(vbox);
   }
+
   set_data(oss.str());
-  /*
-  int desktop = store->new_desktop();
+  dialog.show_all();
+  */
+
   while(true)
   {
 
       //
       std::ostringstream oss;
-      oss << store->desktop(desktop) << "\n\n";
+      //oss << store->desktop(desktop) << "\n\n";
       oss<<"Following options are avilable.\n";
       //set_data(oss.str());
       on_view_peripheral_click();
@@ -257,15 +259,16 @@ void Mainwin::on_insert_desktop_click()
         option_number=get_string("\nAdd which peripheral (-1 when done)? ");
         int option=get_int(option_number);
         if(option == -1 || option_number=="-1") break;
+        int desktop = store->new_desktop();
         try {
             store->add_option(option, desktop);
         } catch(std::exception& e) {
             std::cerr << "#### INVALID OPTION ####\n\n";
         }
-        on_view_desktop_click();
+
         }
   }
-  */
+  on_view_desktop_click();
 }
 void Mainwin::on_insert_order_click()
 {
@@ -275,6 +278,8 @@ void Mainwin::on_insert_order_click()
     on_view_customer_click();
   else
   {
+    if(store->num_customers()==0)
+      on_view_customer_click();
     std::string customer_no=get_string( "Customer? ");
     int customer=get_int(customer_no);
     int order = store->new_order(customer);
@@ -298,6 +303,7 @@ void Mainwin::on_insert_order_click()
     }
     set_msg("\n++++ Order Placed ++++ \n");
   }
+  on_view_order_click();
 }
 void Mainwin::on_insert_customer_click()
 {
@@ -328,7 +334,18 @@ void Mainwin::on_insert_customer_click()
 }
 void Mainwin::on_about_click()
 {
+  Gtk::AboutDialog dialog;
+  dialog.set_transient_for(*this); // Avoid the discouraging warning
+  dialog.set_program_name("ELSA");
+  //auto logo = Gdk::Pixbuf::create_from_file("128px-Pyramidal_matches.png");
+  //dialog.set_logo(logo);
+  dialog.set_version("Version 1.2.1");
+  dialog.set_copyright("Copyright 2020");
+  dialog.set_license_type(Gtk::License::LICENSE_GPL_3_0);
+  std::vector< Glib::ustring > authors = {"Avinash Aryal"};
+  dialog.set_authors(authors);
 
+  dialog.run();
 }
 std::string Mainwin::get_string(std::string prompt)
 {
