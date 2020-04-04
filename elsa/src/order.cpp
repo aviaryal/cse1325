@@ -8,20 +8,7 @@ Order::~Order()
 {
 
 }
-/*
-Order::Order(const Order &rhs):_customer{rhs._customer},_product{rhs._product}
-{
 
-}
-Order & Order::operator=(const Order &order)
-{
-  this->_customer=order._customer;
-  this->_product=order._product;
-  //for(auto v: this->_product)
-    //order._product.push_back(v);
-}
-*/
-//is this void or int
 int Order::add_product(Desktop &desktop)
 {
   _product.push_back(&desktop);
@@ -45,4 +32,12 @@ std::ostream &operator<<(std::ostream &ost, const Order &order)
 
   ost<<std::to_string(total);
   return ost;
+}
+void save(std::ostream &ost)
+{
+
+}
+Order(std::istream &ist)
+{
+
 }

@@ -9,9 +9,10 @@ class Options
   public:
     Options(std::string name , double cost);
     virtual ~Options();
-    //Options(const Options &rhs);
-    //Options &operator=(const Options &rhs);
+  
     double cost();
+    Options(std::istream &ist);
+    void save(std::ostream &ost);
     virtual std::string to_string() const;
     friend std::ostream &operator<<(std::ostream &ost, const Options &options);
   protected:

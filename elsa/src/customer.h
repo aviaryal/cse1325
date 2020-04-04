@@ -7,6 +7,8 @@ class Customer
 {
   public:
     Customer(std::string name, std::string phone, std::string email);
+    void save(std::ostream &ost);
+    Customer(std::istream &ist);
     friend std::ostream &operator<<(std::ostream &ost, const Customer &customer);
   private:
     std::string _name;

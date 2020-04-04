@@ -1,6 +1,7 @@
 #include "mainwin.h"
 #include "entryDialog.h"
 #include <sstream>
+#include <iomanip>
 Mainwin::Mainwin():store{new Store}
 {
   // /////////////////
@@ -24,6 +25,28 @@ Mainwin::Mainwin():store{new Store}
   menubar->append(*menuitem_file);
   Gtk::Menu *filemenu=Gtk::manage(new Gtk::Menu());
   menuitem_file->set_submenu(*filemenu);
+
+  //NEW
+  //Appen new to the file menu
+  Gtk::MenuItem *menuitem_new=Gtk::manage(new Gtk::MenuItem("New", true));
+  menuitem_new->signal_activate().connect([this]{this->on_new_store_click();});
+  filemenu->append(*menuitem_new);
+  //OPEN
+  //Append a open to file menu
+  Gtk::MenuItem *menuitem_open=Gtk::manage(new Gtk::MenuItem("Open", true));
+  menuitem_open->signal_activate().connect([this]{this->on_open_click();});
+  filemenu->append(*menuitem_open);
+  //Save
+  //Appen a save to file menu
+  Gtk::MenuItem *menuitem_save=Gtk::manage(new Gtk::MenuItem("Save", true));
+  menuitem_save->signal_activate().connect([this]{this->on_save_click();});
+  filemenu->append(*menuitem_save);
+
+  //Save_as
+  //Appen a save as to file menu
+  Gtk::MenuItem *menuitem_save_as=Gtk::manage(new Gtk::MenuItem("Save as", true));
+  menuitem_save_as->signal_activate().connect([this]{this->on_save_as_click();});
+  filemenu->append(*menuitem_save_as);
 
   //   Q U I T
   //Append Quit to the File menu
@@ -100,6 +123,15 @@ Mainwin::Mainwin():store{new Store}
   Gtk::Menu *helpmenu= Gtk::manage(new Gtk::Menu());
   menuitem_help->set_submenu(*helpmenu);
 
+
+
+  Gtk::MenuItem *menuitem_easter = Gtk::manage(new Gtk::MenuItem("_Easter Egg", true));
+  menuitem_easter->signal_activate().connect([this] {this->on_easter_egg_click();});
+  helpmenu->append(*menuitem_easter);
+
+
+
+
   // ABOUT
   //create a about to help
   Gtk::MenuItem *menuitem_about=Gtk::manage(new Gtk::MenuItem("About",true));
@@ -130,6 +162,160 @@ Mainwin::~Mainwin()
 {
 
 }
+
+
+
+
+
+void Mainwin::on_easter_egg_click() {
+    Customer c{"Bugs Bunny", "817-ACA-RROT", "bugs@loony.tunes"};          store->add_customer(c);
+    c = Customer{"Elastigirl", "817-STR-ETCH", "helen@incredibles.movie"}; store->add_customer(c);
+    c = Customer{"Tuck and Roll", "817-UFI-RED2", "circus@bugs.life"};     store->add_customer(c);
+    c = Customer{"Tiana", "817-NOG-RIMM", "princess@lily.pad"};            store->add_customer(c);
+
+    Options o{"CPU: 2.6 GHz Xeon 6126T", 2423.47};         store->add_option(o);
+    o = Options{"CPU: 2.4 GHz Core i7-8565U", 388.0};      store->add_option(o);
+    o = Options{"CPU: 2.2 GHz AMD Opteron", 37.71};        store->add_option(o);
+    o = Options{"CPU: 300 MHz AM3351BZCEA30R ARM", 11.03}; store->add_option(o);
+    o = Options{"CPU: 240 MHz ColdFire MCF5", 17.33};      store->add_option(o);
+
+    o = Options{"2 GB RAM", 17.76};                        store->add_option(o);
+    o = Options{"4 GB RAM", 22.95};                        store->add_option(o);
+    o = Options{"8 GB RAM", 34.99};                        store->add_option(o);
+    o = Options{"16 GB RAM", 92.99};                       store->add_option(o);
+    o = Options{"32 GB RAM", 134.96};                      store->add_option(o);
+    o = Options{"64 GB RAM", 319.99};                      store->add_option(o);
+
+    o = Options{"0.5 TB SSD", 79.99};                      store->add_option(o);
+    o = Options{"1 TB SSD", 109.99};                       store->add_option(o);
+    o = Options{"2 TB SSD", 229.99};                       store->add_option(o);
+    o = Options{"4 TB SSD", 599.99};                       store->add_option(o);
+
+    o = Options{"1 TB PC Disk", 44.83};                    store->add_option(o);
+    o = Options{"2 TB Hybrid Disk", 59.99};                store->add_option(o);
+    o = Options{"4 TB Hybrid Disk", 93.98};                store->add_option(o);
+
+    int desktop = store->new_desktop();
+    store->add_option(0, desktop);
+    store->add_option(9, desktop);
+    store->add_option(14, desktop);
+
+    desktop = store->new_desktop();
+    store->add_option(1, desktop);
+    store->add_option(7, desktop);
+    store->add_option(17, desktop);
+
+    desktop = store->new_desktop();
+    store->add_option(5, desktop);
+    store->add_option(7, desktop);
+    store->add_option(15, desktop);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+void Mainwin::on_new_store_click()
+{
+
+}
+void Mainwin::on_open_click()
+{
+  Gtk::FileChooserDialog dialog("Please choose a file",Gtk::FileChooserAction::FILE_CHOOSER_ACTION_OPEN);
+  dialog.set_transient_for(*this);
+
+  auto filter_nim = Gtk::FileFilter::create();
+  filter_nim->set_name("elsa files");
+  filter_nim->add_pattern("*.elsa");
+  dialog.add_filter(filter_nim);
+
+  auto filter_any = Gtk::FileFilter::create();
+  filter_any->set_name("Any files");
+  filter_any->add_pattern("*");
+  dialog.add_filter(filter_any);
+
+  dialog.set_filename("untitled.elsa");
+
+  //Add response buttons the the dialog:
+  dialog.add_button("_Cancel", 0);
+  dialog.add_button("_Open", 1);
+
+  int result = dialog.run();
+  if (result == 1) {
+      try
+      {
+          delete store;
+          std::ifstream ifs{dialog.get_filename()};
+          store = new Store{ifs};
+          if(!ifs) throw std::runtime_error{"File contents bad"};
+          //set_sticks();
+      } catch (std::exception& e)
+      {
+          Gtk::MessageDialog{*this, "Unable to open file"}.run();
+      }
+  }
+}
+void Mainwin::on_save_click()
+{
+
+}
+void Mainwin::on_save_as_click()
+{
+  Gtk::FileChooserDialog dialog("Please choose a file",
+        Gtk::FileChooserAction::FILE_CHOOSER_ACTION_SAVE);
+  dialog.set_transient_for(*this);
+
+  auto filter_nim = Gtk::FileFilter::create();
+  filter_nim->set_name("Elsa files");
+  filter_nim->add_pattern("*.nim");
+  dialog.add_filter(filter_nim);
+
+  auto filter_any = Gtk::FileFilter::create();
+  filter_any->set_name("Any files");
+  filter_any->add_pattern("*");
+  dialog.add_filter(filter_any);
+
+  dialog.set_filename("untitled.elsa");
+
+  //Add response buttons the the dialog:
+  dialog.add_button("_Cancel", 0);
+  dialog.add_button("_Save", 1);
+
+  int result = dialog.run();
+
+  if (result == 1) {
+      try {
+          std::ofstream ofs{dialog.get_filename()};
+          store->save(ofs);
+          //ofs << computer_player->get_active() << std::endl;
+          if(!ofs) throw std::runtime_error{"Error writing file"};
+      } catch(std::exception& e) {
+          Gtk::MessageDialog{*this, "Unable to save file: "}.run();
+      }
+  }
+}
+
+
 void Mainwin::on_quit_click()
 {
   close();
@@ -150,6 +336,7 @@ void Mainwin::on_view_customer_click()
 void Mainwin::on_view_peripheral_click()
 {
   std::ostringstream oss;
+  oss << std::fixed << std::setprecision(2);
   if(store->num_options()==0)
     oss<<"No Options \n";
   else
@@ -163,6 +350,7 @@ void Mainwin::on_view_peripheral_click()
 void Mainwin::on_view_desktop_click()
 {
   std::ostringstream oss;
+  oss << std::fixed << std::setprecision(2);
   if(store->num_desktops()==0)
     oss<<"No desktop \n";
   else
@@ -170,11 +358,13 @@ void Mainwin::on_view_desktop_click()
     for(int i=0;i <store->num_desktops();i++)
       oss<< i << ") " << store->desktop(i) << "\n";
   }
+
   set_data(oss.str());
 }
 void Mainwin::on_view_order_click()
 {
   std::ostringstream oss;
+  oss << std::fixed << std::setprecision(2);
   if(store->num_orders()==0)
     oss<<"No order \n";
   else
@@ -241,39 +431,29 @@ void Mainwin::on_insert_desktop_click()
   dialog.run();
   */
 
-  while(true)
+  on_view_peripheral_click();
+  int desktop = store->new_desktop();
+  while(true && store->num_options()>0)
   {
-
-      //
       std::ostringstream oss;
-      //oss << store->desktop(desktop) << "\n\n";
-      oss<<"Following options are avilable.\n";
-      //set_data(oss.str());
-      on_view_peripheral_click();
-      if(store->num_options()==0)
-      {
-        on_view_peripheral_click();
+      std::string option_number;
+      oss << store->desktop(desktop) << "\nAdd which peripheral (-1 when done)? ";
+      option_number=get_string(oss.str());
+      if(option_number.empty()) continue;
+      int option=get_int(option_number);
+      if(option == -1 || option_number=="-1")
         break;
+      try {
+          store->add_option(option, desktop);
+          set_msg("Added desktop " + std::to_string(desktop));
+
+      } catch(std::exception& e) {
+          Gtk::MessageDialog{*this, "#### INVALID OPTION ####\n\n"}.run();
       }
-      else
-      {
-        std::string option_number;
-        option_number=get_string("\nAdd which peripheral (-1 when done)? ");
-        int option=get_int(option_number);
-        if(option == -1 || option_number=="-1") break;
-        int desktop = store->new_desktop();
-        try {
-            store->add_option(option, desktop);
-            set_msg("Added Desktop: ");
-        } catch(std::exception& e) {
-            std::cerr << "#### INVALID OPTION ####\n\n";
-        }
-
-        }
-
   }
   //*/
   on_view_desktop_click();
+
 }
 void Mainwin::on_insert_order_click()
 {
@@ -371,6 +551,7 @@ double Mainwin::get_double(std::string prompt)
   try
   {
     double cost= std::stod(prompt);
+    return cost;
   }
   catch (std::invalid_argument const &e)
   {
@@ -385,7 +566,7 @@ int Mainwin::get_int(std::string prompt)
 {
   try
   {
-    double cost= std::stod(prompt);
+    int cost= std::stoi(prompt);
   }
   catch (std::invalid_argument const &e)
   {

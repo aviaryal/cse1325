@@ -9,6 +9,10 @@ class Mainwin : public Gtk::Window
     Mainwin();
     virtual ~Mainwin();
   protected:
+    void on_new_store_click();
+    void on_save_click();
+    void on_save_as_click();
+    void on_open_click();
     void on_quit_click();
     void on_view_peripheral_click();
     void on_view_desktop_click();
@@ -24,6 +28,8 @@ class Mainwin : public Gtk::Window
     int get_int(std::string prompt);
     void set_data(std::string s);
     void set_msg(std::string s);
+
+    void on_easter_egg_click();
   private:
     Store *store;
     Gtk::Label *data;

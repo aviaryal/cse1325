@@ -1,4 +1,16 @@
 #include "desktop.h"
+Desktop::Desktop()
+{
+
+}
+Desktop(std::istream &ist)
+{
+
+}
+void save(std::ostream &ost)
+{
+  
+}
 void Desktop::addOption(Options &options)
 {
   _options.push_back(&options);

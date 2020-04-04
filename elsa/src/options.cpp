@@ -4,18 +4,7 @@ Options::Options(std::string name ,double cost):_name{name},_cost{cost}
 {
 
 }
-/*
-Options::Options(const Options &rhs):_name{rhs._name},_cost{rhs._cost}
-{
 
-}
-
-Options & Options::operator=(const Options &rhs)
-{
-  this->_name=rhs._name;
-  this->_cost=rhs._cost;
-}
-*/
 Options::~Options()
 {
 
@@ -31,4 +20,13 @@ std::string Options::to_string() const
 std::ostream &operator<<(std::ostream &ost, const Options &options)
 {
   return ost<<options.to_string();
+}
+
+Options(std::istream &ist)
+{
+
+}
+void save(std::ostream &ost)
+{
+  
 }

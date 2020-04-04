@@ -1,5 +1,35 @@
 #include "store.h"
 
+Store::Store()
+{
+
+}
+Store::Store(std::istream &ist)
+{
+  int customersize;
+  //ist.ignore(32767, ‘\n’);
+  ist>>customersize;
+  for(int i=0;i<customersize;i++)
+  {
+    std::string name, phoneno, email;
+    ist>>name;
+    ist>>phoneno;
+    ist>>email;
+
+    _customers.push_back(Customer{name,phoneno,email});
+  }
+}
+void Store::save(std::ostream &ost)
+{
+    ost<<std::to_string(num_customers())<<std::endl;
+    //for(auto v = _customers)
+    for(int i=0;i<num_customers();i++)
+    {
+      _customers.at(i).save(ost);
+    }
+
+
+}
 void Store::add_customer(Customer &customer)
 {
   _customers.push_back(customer);

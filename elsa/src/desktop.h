@@ -7,8 +7,11 @@
 class Desktop
 {
   public:
+    Desktop();
     void addOption(Options &options);
     double price();
+    Desktop(std::istream &ist);
+    void save(std::ostream &ost);
     friend std::ostream &operator<<(std::ostream &ost, Desktop &desktop);
   private:
     std::vector<Options *> _options;
