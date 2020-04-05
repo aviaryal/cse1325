@@ -6,26 +6,60 @@ Store::Store()
 }
 Store::Store(std::istream &ist)
 {
-  int customersize;
-  //ist.ignore(32767, ‘\n’);
-  ist>>customersize;
-  for(int i=0;i<customersize;i++)
-  {
-    std::string name, phoneno, email;
-    ist>>name;
-    ist>>phoneno;
-    ist>>email;
+  int customersize,optionssize,ordersize,desktopsize;
 
-    _customers.push_back(Customer{name,phoneno,email});
-  }
+  ist.exceptions(ist.exceptions() | std::ios_base::badbit);
+  //ist.ignore(32767, ‘\n’)
+  ist>>customersize;
+  ist.ignore(32767, '\n');
+  for(int i=0;i<customersize;i++)
+    _customers.push_back(Customer{ist});
+
+  ist>>optionssize;
+  ist.ignore(32767, '\n');
+  for(int i=0;i<optionssize;i++)
+    _options.push_back(new Options{ist});
+
+  ist>>desktopsize;
+  ist.ignore(32767, '\n');
+  std::cout<<desktopsize;
+  for(int i=0;i<desktopsize;i++)
+    _desktop.push_back(Desktop{ist});
+
 }
 void Store::save(std::ostream &ost)
 {
-    ost<<std::to_string(num_customers())<<std::endl;
+
     //for(auto v = _customers)
+    if(num_customers()>0)
+      ost<<std::to_string(num_customers())<<std::endl;
     for(int i=0;i<num_customers();i++)
     {
       _customers.at(i).save(ost);
+    }
+
+    if(num_options()>0)
+      ost<<std::to_string(num_options())<<std::endl;
+    for(int i=0;i<num_options();i++)
+    {
+      _options.at(i)->save(ost);
+    }
+    if(num_desktops()>0)
+    {
+      ost<<std::to_string(num_desktops())<<std::endl;
+      for(int i=0;i<num_desktops();i++)
+      {
+        //ost<<i<<std::endl;
+        _desktop.at(i).save(ost);
+      }
+    }
+    if(num_orders()>0)
+    {
+      ost<<std::to_string(num_orders())<<std::endl;
+      for(int i=0;i<num_desktops();i++)
+      {
+        _orders.at(i).save(ost);
+      }
     }
 
 

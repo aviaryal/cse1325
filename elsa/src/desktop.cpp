@@ -3,13 +3,24 @@ Desktop::Desktop()
 {
 
 }
-Desktop(std::istream &ist)
+Desktop::Desktop(std::istream &ist)
 {
-
+  int optionsize;
+  ist>>optionsize;
+  ist.ignore(32767, '\n');
+  std::string name;
+  std::string coststring;
+  double cost;
+  for(int i=0;i<optionsize;i++)
+  {
+    _options.push_back(new Options{ist});
+  }
 }
-void save(std::ostream &ost)
+void Desktop::save(std::ostream &ost)
 {
-  
+  ost<<_options.size()<<std::endl;
+  for(auto v: _options)
+    v->save(ost);
 }
 void Desktop::addOption(Options &options)
 {

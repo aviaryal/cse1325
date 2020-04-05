@@ -12,7 +12,6 @@ class Order
   public:
     Order(Customer &customer);
     virtual ~Order();
-  
     int add_product(Desktop &desktop);
     void save(std::ostream &ost);
     Order(std::istream &ist);

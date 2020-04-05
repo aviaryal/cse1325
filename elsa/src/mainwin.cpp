@@ -267,8 +267,9 @@ void Mainwin::on_open_click()
           delete store;
           std::ifstream ifs{dialog.get_filename()};
           store = new Store{ifs};
+
           if(!ifs) throw std::runtime_error{"File contents bad"};
-          //set_sticks();
+
       } catch (std::exception& e)
       {
           Gtk::MessageDialog{*this, "Unable to open file"}.run();

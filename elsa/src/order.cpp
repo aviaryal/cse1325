@@ -33,11 +33,21 @@ std::ostream &operator<<(std::ostream &ost, const Order &order)
   ost<<std::to_string(total);
   return ost;
 }
-void save(std::ostream &ost)
+void Order::save(std::ostream &ost)
 {
-
+  _customer.save(ost);
+  for(int i=0;i<_product.size();i++)
+    _product.at(i)->save(ost);
 }
-Order(std::istream &ist)
+
+Order::Order(std::istream &ist)
 {
+  int ordersize;
+  Customer *customer= new Customer{ist};
+  //_customer=customer;
+  ist>>ordersize;
+  ist.ignore(32767, '\n');
+  for(int i=0;i<ordersize;i++)
+    _product.push_back(new Desktop{ist});
 
 }
