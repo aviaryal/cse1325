@@ -1,6 +1,8 @@
 #include "mainwin.h"
 #include "entryDialog.h"
+#include <iostream>
 #include <sstream>
+#include <fstream>
 #include <iomanip>
 Mainwin::Mainwin():store{new Store}
 {
@@ -260,12 +262,12 @@ void Mainwin::on_open_click()
   //Add response buttons the the dialog:
   dialog.add_button("_Cancel", 0);
   dialog.add_button("_Open", 1);
-
   int result = dialog.run();
   if (result == 1) {
       try
       {
           delete store;
+          _filename=dialog.get_filename();
           std::ifstream ifs{dialog.get_filename()};
           store = new Store{ifs};
 
@@ -279,7 +281,19 @@ void Mainwin::on_open_click()
 }
 void Mainwin::on_save_click()
 {
-
+  if(_filename.empty())
+    on_save_as_click();
+  else
+  {
+    try
+    {
+        std::ofstream ofs{_filename};
+        store->save(ofs);
+        if(!ofs) throw std::runtime_error{"Error writing file"};
+    } catch(std::exception& e) {
+        Gtk::MessageDialog{*this, "Unable to save file: "}.run();
+    }
+  }
 }
 void Mainwin::on_save_as_click()
 {
@@ -306,7 +320,9 @@ void Mainwin::on_save_as_click()
   int result = dialog.run();
 
   if (result == 1) {
-      try {
+      try
+      {
+          _filename=dialog.get_filename();
           std::ofstream ofs{dialog.get_filename()};
           store->save(ofs);
           //ofs << computer_player->get_active() << std::endl;

@@ -34,5 +34,6 @@ class Mainwin : public Gtk::Window
     Store *store;
     Gtk::Label *data;
     Gtk::Label *msg;
+    std::string _filename;
 };
 #endif
