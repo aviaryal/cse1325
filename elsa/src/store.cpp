@@ -7,7 +7,7 @@ Store::Store()
 Store::Store(std::istream &ist)
 {
   int customersize,optionssize,ordersize,desktopsize;
-
+  std::string check;
   ist.exceptions(ist.exceptions() | std::ios_base::badbit);
   //ist.ignore(32767, ‘\n’)
   ist>>customersize;
@@ -25,6 +25,12 @@ Store::Store(std::istream &ist)
   std::cout<<desktopsize;
   for(int i=0;i<desktopsize;i++)
     _desktop.push_back(Desktop{ist,_options});
+
+  getline(ist,check);
+  ist>>ordersize;
+  ist.ignore(32767, '\n');
+  for(int i=0;i<ordersize;i++)
+    _orders.push_back(Order{ist,_customers,_desktop});
 
 }
 void Store::save(std::ostream &ost)
@@ -49,20 +55,20 @@ void Store::save(std::ostream &ost)
       ost<<std::to_string(num_desktops())<<std::endl;
       for(int i=0;i<num_desktops();i++)
       {
-        //ost<<i<<std::endl;
+
         _desktop.at(i).save(ost,_options);
       }
     }
-    /*
+
     if(num_orders()>0)
     {
-      ost<<std::to_string(num_orders())<<std::endl;
+      ost<<"Orders::\n"<<std::to_string(num_orders())<<std::endl;
       for(int i=0;i<num_desktops();i++)
       {
-        _orders.at(i).save(ost);
+        _orders.at(i).save(ost,_customers,_desktop);
       }
     }
-    */
+
 
 
 }
@@ -98,7 +104,7 @@ int Store::new_desktop()
 }
 int Store::new_order(int customer)
 {
-  Order order=_customers.at(customer);
+  Order order=&_customers.at(customer);
   _orders.push_back(order);
   return _orders.size()-1;
 }

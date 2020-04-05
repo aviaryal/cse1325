@@ -237,7 +237,8 @@ void Mainwin::on_easter_egg_click() {
 
 void Mainwin::on_new_store_click()
 {
-
+ delete store;
+ on_view_customer_click();
 }
 void Mainwin::on_open_click()
 {

@@ -1,6 +1,6 @@
 #include "order.h"
 
-Order::Order(Customer &customer):_customer(customer)
+Order::Order(Customer *customer):_customer{customer}
 {
 
 }
@@ -26,7 +26,7 @@ double Order::price() const
 std::ostream &operator<<(std::ostream &ost, const Order &order)
 {
   double total= order.price();
-  ost<<order._customer<<"\n";
+  ost<<*(order._customer)<<"\n";
   for(auto v:order. _product)
     ost<<*v<<"\n";
 
@@ -38,32 +38,32 @@ void Order::save(std::ostream &ost,std::vector<Customer> &customers,std::vector<
 {
   for(int i=0;i<customers.size();i++)
   {
-    if(customers.at(i)==_customer)
+    if(&customers.at(i)== _customer)
     {
-      ost<<i<<std::endl;
-      for(int j=0;j<desktop.size();j++)
-      {
-        for(auto v: _product)
+      ost<<i<<"\n"<<_product.size()<<std::endl;
+      for(auto v: _product)
+        for(int j=0;j<desktop.size();j++)
           if(&desktop.at(j)==v)
             ost<<j<<std::endl;
-      }
     }
   }
+
 }
 
-/*
 
 Order::Order(std::istream &ist, std::vector<Customer> &customers,std::vector<Desktop> &desktop)
 {
-
-
+  int index;
   int ordersize;
-  Customer *customer= new Customer{ist};
-  //_customer=customer;
+  ist>>index;
+  ist.ignore(32767, '\n');
+  _customer=&customers.at(index);
+  
   ist>>ordersize;
   ist.ignore(32767, '\n');
   for(int i=0;i<ordersize;i++)
-    _product.push_back(new Desktop{ist});
-
+  {
+    ist>>index;
+    _product.push_back(&desktop.at(index));
+  }
 }
-*/
