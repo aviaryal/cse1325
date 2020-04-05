@@ -24,7 +24,7 @@ Store::Store(std::istream &ist)
   ist.ignore(32767, '\n');
   std::cout<<desktopsize;
   for(int i=0;i<desktopsize;i++)
-    _desktop.push_back(Desktop{ist});
+    _desktop.push_back(Desktop{ist,_options});
 
 }
 void Store::save(std::ostream &ost)
@@ -50,9 +50,10 @@ void Store::save(std::ostream &ost)
       for(int i=0;i<num_desktops();i++)
       {
         //ost<<i<<std::endl;
-        _desktop.at(i).save(ost);
+        _desktop.at(i).save(ost,_options);
       }
     }
+    /*
     if(num_orders()>0)
     {
       ost<<std::to_string(num_orders())<<std::endl;
@@ -61,6 +62,7 @@ void Store::save(std::ostream &ost)
         _orders.at(i).save(ost);
       }
     }
+    */
 
 
 }

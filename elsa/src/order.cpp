@@ -33,15 +33,30 @@ std::ostream &operator<<(std::ostream &ost, const Order &order)
   ost<<std::to_string(total);
   return ost;
 }
-void Order::save(std::ostream &ost)
+
+void Order::save(std::ostream &ost,std::vector<Customer> &customers,std::vector<Desktop> &desktop)
 {
-  _customer.save(ost);
-  for(int i=0;i<_product.size();i++)
-    _product.at(i)->save(ost);
+  for(int i=0;i<customers.size();i++)
+  {
+    if(customers.at(i)==_customer)
+    {
+      ost<<i<<std::endl;
+      for(int j=0;j<desktop.size();j++)
+      {
+        for(auto v: _product)
+          if(&desktop.at(j)==v)
+            ost<<j<<std::endl;
+      }
+    }
+  }
 }
 
-Order::Order(std::istream &ist)
+/*
+
+Order::Order(std::istream &ist, std::vector<Customer> &customers,std::vector<Desktop> &desktop)
 {
+
+
   int ordersize;
   Customer *customer= new Customer{ist};
   //_customer=customer;
@@ -51,3 +66,4 @@ Order::Order(std::istream &ist)
     _product.push_back(new Desktop{ist});
 
 }
+*/

@@ -13,8 +13,8 @@ class Order
     Order(Customer &customer);
     virtual ~Order();
     int add_product(Desktop &desktop);
-    void save(std::ostream &ost);
-    Order(std::istream &ist);
+    void save(std::ostream &ost,std::vector<Customer> &customers,std::vector<Desktop> &desktop);
+    //Order(std::istream &ist,std::vector<Customer> &customers,std::vector<Desktop> &desktop);
     double price() const;
     friend std::ostream &operator<<(std::ostream &ost, const Order &order);
   private:

@@ -3,24 +3,34 @@ Desktop::Desktop()
 {
 
 }
-Desktop::Desktop(std::istream &ist)
+Desktop::Desktop(std::istream &ist,std::vector<Options *> &options)
 {
-  int optionsize;
-  ist>>optionsize;
+  int no_options,index;
+  ist>>no_options;
   ist.ignore(32767, '\n');
-  std::string name;
-  std::string coststring;
-  double cost;
-  for(int i=0;i<optionsize;i++)
+  for(int i=0;i<no_options;i++)
   {
-    _options.push_back(new Options{ist});
+    ist>>index;
+    ist.ignore(32767, '\n');
+    _options.push_back(options.at(index));
   }
 }
-void Desktop::save(std::ostream &ost)
+void Desktop::save(std::ostream &ost,std::vector<Options *> &options)
 {
+  ost<<_options.size()<<std::endl;
+  for(auto v:_options)
+    for(int i=0;i<options.size();i++)
+    {
+      //Options *point=options.at(i);
+      if(options.at(i)==v)
+        ost<<i<<std::endl;
+    }
+
+  /*
   ost<<_options.size()<<std::endl;
   for(auto v: _options)
     v->save(ost);
+  */
 }
 void Desktop::addOption(Options &options)
 {
