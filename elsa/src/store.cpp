@@ -9,26 +9,31 @@ Store::Store(std::istream &ist)
   int customersize,optionssize,ordersize,desktopsize;
   std::string check;
   ist.exceptions(ist.exceptions() | std::ios_base::badbit);
-  //ist.ignore(32767, ‘\n’)
+
+
   ist>>customersize;
   ist.ignore(32767, '\n');
+  if(ist.fail() || ist.eof()) return;
   for(int i=0;i<customersize;i++)
     _customers.push_back(Customer{ist});
 
   ist>>optionssize;
   ist.ignore(32767, '\n');
+  if(ist.fail() || ist.eof()) return;
   for(int i=0;i<optionssize;i++)
     _options.push_back(new Options{ist});
 
   ist>>desktopsize;
   ist.ignore(32767, '\n');
-  std::cout<<desktopsize;
+  if(ist.fail() || ist.eof()) return;
+
   for(int i=0;i<desktopsize;i++)
     _desktop.push_back(Desktop{ist,_options});
 
-  getline(ist,check);
+  //getline(ist,check);
   ist>>ordersize;
   ist.ignore(32767, '\n');
+  if(ist.fail() || ist.eof()) return;
   for(int i=0;i<ordersize;i++)
     _orders.push_back(Order{ist,_customers,_desktop});
 
@@ -62,7 +67,7 @@ void Store::save(std::ostream &ost)
 
     if(num_orders()>0)
     {
-      ost<<"Orders::\n"<<std::to_string(num_orders())<<std::endl;
+      ost<<std::to_string(num_orders())<<std::endl;
       for(int i=0;i<num_orders();i++)
       {
         _orders.at(i).save(ost,_customers,_desktop);

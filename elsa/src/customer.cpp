@@ -9,6 +9,7 @@ std::ostream &operator<<(std::ostream &ost, const Customer &customer)
 }
 Customer::Customer(std::istream &ist)
 {
+  if(ist.eof() || ist.fail()) return;
   getline(ist,_name);
   getline(ist,_phone);
   getline(ist,_email);
