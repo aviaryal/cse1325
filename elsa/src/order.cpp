@@ -58,7 +58,6 @@ Order::Order(std::istream &ist, std::vector<Customer> &customers,std::vector<Des
   ist>>index;
   ist.ignore(32767, '\n');
   _customer=&customers.at(index);
-  
   ist>>ordersize;
   ist.ignore(32767, '\n');
   for(int i=0;i<ordersize;i++)

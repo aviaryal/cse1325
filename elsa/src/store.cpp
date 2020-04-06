@@ -67,7 +67,7 @@ void Store::save(std::ostream &ost)
 
     if(num_orders()>0)
     {
-      ost<<std::to_string(num_orders())<<std::endl;
+      ost<<num_orders()<<std::endl;
       for(int i=0;i<num_orders();i++)
       {
         _orders.at(i).save(ost,_customers,_desktop);

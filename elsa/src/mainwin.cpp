@@ -218,7 +218,7 @@ void Mainwin::on_easter_egg_click() {
 void Mainwin::on_new_store_click()
 {
  delete store;
- on_view_customer_click();
+ store= new Store;
 }
 void Mainwin::on_open_click()
 {
@@ -255,6 +255,7 @@ void Mainwin::on_open_click()
       {
           Gtk::MessageDialog{*this, "Unable to open file"}.run();
           delete store;
+          store=new Store;
       }
   }
 }

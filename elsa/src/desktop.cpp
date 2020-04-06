@@ -7,12 +7,21 @@ Desktop::Desktop(std::istream &ist,std::vector<Options *> &options)
 {
   int no_options,index;
   ist>>no_options;
+  if(ist.fail() || ist.eof()) return;
   ist.ignore(32767, '\n');
   for(int i=0;i<no_options;i++)
   {
     ist>>index;
+    if(ist.fail() || ist.eof()) return;
     ist.ignore(32767, '\n');
-    _options.push_back(options.at(index));
+    try
+    {
+      _options.push_back(options.at(index));
+    }
+    catch (std::exception& e)
+    {
+      std::cerr << "Index out of out_of_range" << '\n';
+    }
   }
 }
 void Desktop::save(std::ostream &ost,std::vector<Options *> &options)
