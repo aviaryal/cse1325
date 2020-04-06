@@ -145,8 +145,13 @@ Mainwin::Mainwin():store{new Store}
   // Provide a text entry box to show the data
   data = Gtk::manage(new Gtk::Label{"",Gtk::ALIGN_START,Gtk::ALIGN_START});
   data->set_hexpand(true);
-  data->set_vexpand(true);
-  vbox->add(*data);
+  //data->set_vexpand(true);
+  Gtk::EventBox *eb = Gtk::manage(new Gtk::EventBox);
+  eb->set_hexpand();
+  eb->override_background_color(Gdk::RGBA("white"));
+  eb->add(*data);
+  vbox->pack_start(*eb, Gtk::PACK_EXPAND_WIDGET, 0);
+
 
   ///////////////////////////////////////////////////////////////////////
   //Provide a status bar
@@ -321,13 +326,17 @@ void Mainwin::on_quit_click()
 void Mainwin::on_view_customer_click()
 {
   std::ostringstream oss;
+  oss << std::fixed << std::setprecision(2);
   if(store->num_customers()==0)
-    oss<<"Sorry, No customer \n";
+    oss<<"<big><b>Sorry, No customer </b></big><tt>\n";
   else
   {
+
+    oss << "<big><b>Customer</b></big><tt>\n\n";
     for(int i=0;i <store->num_customers();i++)
       oss<< i << ") " << store->customer(i) << "\n";
   }
+  oss<<"</tt>";
   set_data(oss.str());
 }
 
@@ -336,27 +345,31 @@ void Mainwin::on_view_peripheral_click()
   std::ostringstream oss;
   oss << std::fixed << std::setprecision(2);
   if(store->num_options()==0)
-    oss<<"No Options \n";
+    oss<<"<big><b>No Options </b></big><tt>\n";
   else
   {
+    oss << "<big><b>Options</b></big><tt>\n\n";
     for(int i=0;i <store->num_options();i++)
       oss<< i << ") " << store->option(i) << "\n";
   }
+  oss<<"</tt>";
   set_data(oss.str());
 }
 
 void Mainwin::on_view_desktop_click()
 {
   std::ostringstream oss;
+
   oss << std::fixed << std::setprecision(2);
   if(store->num_desktops()==0)
-    oss<<"No desktop \n";
+    oss<<"<big><b>No desktop </b></big><tt>\n";
   else
   {
+    oss << "<big><b>Desktop</b></big><tt>\n\n";
     for(int i=0;i <store->num_desktops();i++)
       oss<< i << ") " << store->desktop(i) << "\n";
   }
-
+  oss<<"</tt>";
   set_data(oss.str());
 }
 void Mainwin::on_view_order_click()
@@ -364,12 +377,14 @@ void Mainwin::on_view_order_click()
   std::ostringstream oss;
   oss << std::fixed << std::setprecision(2);
   if(store->num_orders()==0)
-    oss<<"No order \n";
+    oss<<"<big><b>No order </b></big><tt>\n";
   else
   {
+    oss << "<big><b>Orders</b></big><tt>\n\n";
     for(int i=0;i <store->num_orders();i++)
       oss<< i << ") " << store->order(i) << "\n";
   }
+  oss<<"</tt>";
   set_data(oss.str());
 
 }
