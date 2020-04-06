@@ -215,28 +215,6 @@ void Mainwin::on_easter_egg_click() {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 void Mainwin::on_new_store_click()
 {
  delete store;
@@ -272,7 +250,7 @@ void Mainwin::on_open_click()
           store = new Store{ifs};
 
           if(!ifs) throw std::runtime_error{"File contents bad"};
-          
+
       } catch (std::exception& e)
       {
           Gtk::MessageDialog{*this, "Unable to open file"}.run();
@@ -304,7 +282,7 @@ void Mainwin::on_save_as_click()
 
   auto filter_nim = Gtk::FileFilter::create();
   filter_nim->set_name("Elsa files");
-  filter_nim->add_pattern("*.nim");
+  filter_nim->add_pattern("*.elsa");
   dialog.add_filter(filter_nim);
 
   auto filter_any = Gtk::FileFilter::create();
