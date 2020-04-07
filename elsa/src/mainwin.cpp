@@ -338,6 +338,7 @@ void Mainwin::on_view_customer_click()
   }
   oss<<"</tt>";
   set_data(oss.str());
+  set_msg("");
 }
 
 void Mainwin::on_view_peripheral_click()
@@ -354,6 +355,7 @@ void Mainwin::on_view_peripheral_click()
   }
   oss<<"</tt>";
   set_data(oss.str());
+  set_msg("");
 }
 
 void Mainwin::on_view_desktop_click()
@@ -371,6 +373,7 @@ void Mainwin::on_view_desktop_click()
   }
   oss<<"</tt>";
   set_data(oss.str());
+  set_msg("");
 }
 void Mainwin::on_view_order_click()
 {
@@ -386,7 +389,7 @@ void Mainwin::on_view_order_click()
   }
   oss<<"</tt>";
   set_data(oss.str());
-
+  set_msg("");
 }
 void Mainwin::on_insert_peripheral_click()
 {
@@ -476,8 +479,8 @@ void Mainwin::on_insert_order_click()
     on_view_customer_click();
   else
   {
-    if(store->num_customers()==0)
-      on_view_customer_click();
+
+    on_view_customer_click();
     std::string customer_no=get_string( "Customer? ");
     int customer=get_int(customer_no);
     int order = store->new_order(customer);
@@ -592,9 +595,9 @@ int Mainwin::get_int(std::string prompt)
 }
 void Mainwin::set_data(std::string s)
 {
-  data->set_text(s);
+  data->set_markup(s);
 }
 void Mainwin::set_msg(std::string s)
 {
-  msg->set_text(s);
+  msg->set_markup(s);
 }
