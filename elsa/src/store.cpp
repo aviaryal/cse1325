@@ -6,76 +6,83 @@ Store::Store()
 }
 Store::Store(std::istream &ist)
 {
-  int customersize,optionssize,ordersize,desktopsize;
-  std::string check;
-  ist.exceptions(ist.exceptions() | std::ios_base::badbit);
+  std::string s;
+  int vsize;
+  std::getline(ist, s);
+  if(s != ELSA_CHECK) throw std::runtime_error{"Not an ELSA file"};
+  std::getline(ist, s);
+  if(s != ELSA_FILE_VERSION) throw std::runtime_error{"Unsupported ELSA file version"};
 
-
-  ist>>customersize;
+  //ist.exceptions(ist.exceptions() | std::ios_base::badbit);
+  //Load customer
+  ist>>vsize;
   ist.ignore(32767, '\n');
-  if(ist.fail() || ist.eof()) return;
-  for(int i=0;i<customersize;i++)
+  while(vsize--)
     _customers.push_back(Customer{ist});
+  if(!ist)
+    throw std::runtime_error{"Bad Customer Data"};
 
-  ist>>optionssize;
+
+  //Load options
+  ist>>vsize;
   ist.ignore(32767, '\n');
-  if(ist.fail() || ist.eof()) return;
-  for(int i=0;i<optionssize;i++)
+
+  while(vsize--)
     _options.push_back(new Options{ist});
+  if(!ist)
+    throw std::runtime_error{"Bad Customer Data"};
 
-  ist>>desktopsize;
+  //Load desktop
+
+  ist>>vsize;
   ist.ignore(32767, '\n');
-  if(ist.fail() || ist.eof()) return;
-
-  for(int i=0;i<desktopsize;i++)
+  while(vsize--)
     _desktop.push_back(Desktop{ist,_options});
+  if(!ist)
+    throw std::runtime_error{"Bad desktop data"};
 
-  //getline(ist,check);
-  ist>>ordersize;
+  //load order
+
+  ist>>vsize;
+  if(vsize==10) return;
   ist.ignore(32767, '\n');
-  if(ist.fail() || ist.eof()) return;
-  for(int i=0;i<ordersize;i++)
+  while(vsize--)
     _orders.push_back(Order{ist,_customers,_desktop});
+  if(!ist)
+    throw std::runtime_error{"Bad desktop data"};
 
 }
 void Store::save(std::ostream &ost)
 {
 
-    //for(auto v = _customers)
-    if(num_customers()>0)
-      ost<<std::to_string(num_customers())<<std::endl;
-    for(int i=0;i<num_customers();i++)
-    {
-      _customers.at(i).save(ost);
-    }
+  ost << ELSA_CHECK << "\n";
+  ost << ELSA_FILE_VERSION << "\n";
 
-    if(num_options()>0)
-      ost<<std::to_string(num_options())<<std::endl;
-    for(int i=0;i<num_options();i++)
-    {
-      _options.at(i)->save(ost);
-    }
-    if(num_desktops()>0)
-    {
-      ost<<std::to_string(num_desktops())<<std::endl;
-      for(int i=0;i<num_desktops();i++)
-      {
-
-        _desktop.at(i).save(ost,_options);
-      }
-    }
-
-    if(num_orders()>0)
-    {
-      ost<<num_orders()<<std::endl;
-      for(int i=0;i<num_orders();i++)
-      {
-        _orders.at(i).save(ost,_customers,_desktop);
-      }
-    }
+  ost<<std::to_string(num_customers())<<std::endl;
+  for(int i=0;i<num_customers();i++)
+  {
+    _customers.at(i).save(ost);
+  }
 
 
+  ost<<std::to_string(num_options())<<std::endl;
+  for(int i=0;i<num_options();i++)
+  {
+    _options.at(i)->save(ost);
+  }
 
+  ost<<std::to_string(num_desktops())<<std::endl;
+  for(int i=0;i<num_desktops();i++)
+  {
+
+    _desktop.at(i).save(ost,_options);
+  }
+
+  ost<<num_orders()<<std::endl;
+  for(int i=0;i<num_orders();i++)
+  {
+      _orders.at(i).save(ost,_customers,_desktop);
+  }
 
 }
 void Store::add_customer(Customer &customer)

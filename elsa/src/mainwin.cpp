@@ -255,12 +255,14 @@ void Mainwin::on_open_click()
           store = new Store{ifs};
 
           if(!ifs) throw std::runtime_error{"File contents bad"};
+          on_view_customer_click();
 
       } catch (std::exception& e)
       {
-          Gtk::MessageDialog{*this, "Unable to open file"}.run();
-          delete store;
-          store=new Store;
+          std::string err = "Unable to open store from " +_filename+ " (" + e.what() + " )";
+          on_new_store_click();
+          Gtk::MessageDialog{*this, err, false, Gtk::MESSAGE_WARNING}.run();
+
       }
   }
 }

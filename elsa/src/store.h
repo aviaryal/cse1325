@@ -8,6 +8,11 @@
 #include "options.h"
 #include "customer.h"
 #include <fstream>
+
+
+const std::string ELSA_CHECK = "#L$@";
+const std::string ELSA_VERSION = "1.1.0";
+const std::string ELSA_FILE_VERSION = "1.0-simple";
 class Store
 {
   public:

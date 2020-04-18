@@ -6,8 +6,8 @@ all: main.e
 debug: CXXFLAGS += -g
 debug: main.e
 
-main.e: main.o customer.o store.o order.o desktop.o options.o mainwin.o entryDialog.o *.h
-	$(CXX) $(CXXFLAGS) main.o customer.o store.o order.o desktop.o options.o mainwin.o entryDialog.o $(GTKFLAGS) -o main.e
+main.e: main.o customer.o store.o order.o desktop.o options.o mainwin.o entryDialog.o ram.o *.h
+	$(CXX) $(CXXFLAGS) main.o customer.o store.o order.o desktop.o options.o mainwin.o entryDialog.o ram.o $(GTKFLAGS) -o main.e
 main.o: main.cpp *h
 	$(CXX) $(CXXFLAGS) -c main.cpp $(GTKFLAGS) -o main.o
 mainwin.o: mainwin.cpp *h
@@ -24,7 +24,8 @@ desktop.o: desktop.cpp *h
 	$(CXX) $(CXXFLAGS) -c desktop.cpp -o desktop.o
 options.o: options.cpp *h
 	$(CXX) $(CXXFLAGS) -c options.cpp -o options.o
-
+ram.o: ram.cpp *h
+	$(CXX) $(CXXFLAGS) -c ram.cpp -o ram.o
 
 
 clean:
