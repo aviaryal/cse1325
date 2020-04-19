@@ -17,9 +17,16 @@ std::string Options::to_string() const
 {
   return _name+"\t\tCost: $"+std::to_string(_cost);
 }
+
+std::ostream& Options::print(std::ostream& ost) const
+{
+  return ost<<to_string();
+}
+
 std::ostream &operator<<(std::ostream &ost, const Options &options)
 {
-  return ost<<options.to_string();
+  return options.print(ost);
+  //return ost<<options.to_string();
 }
 
 Options::Options (std::istream &ist)
@@ -37,8 +44,12 @@ Options::Options (std::istream &ist)
         std::cerr << "Error while processing" << '\n';
   }
 }
+Options::Options(std::ostream &ost)
+{
+  save(ost);
+}
 void Options::save(std::ostream &ost)
 {
   ost<<_name<<std::endl;
-  ost<<std::to_string(_cost)<<std::endl;
+  ost<<_cost<<std::endl;
 }

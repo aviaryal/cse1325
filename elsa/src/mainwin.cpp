@@ -393,27 +393,114 @@ void Mainwin::on_view_order_click()
   set_data(oss.str());
   set_msg("");
 }
+
 void Mainwin::on_insert_peripheral_click()
 {
-  std::string option_name, option_cost;
-  do
+  Gtk::Dialog  *dialog= new Gtk::Dialog{"Add Peripheral", *this};
+  // The grid allows placing widgets in the Dialog starting at (x,y) locations
+  //    with upper left at (0,0), and specify a width and height for merged cells
+  Gtk::Grid grid;
+  Gtk::Label t_name{"Type"};       // This labels the drop down
+  Gtk::ComboBoxText c_type{true};  // Drop down with an Entry (true)
+  c_type.append("RAM");            // Add the predefined options
+  c_type.append("Other");
+  c_type.set_active(0);
+  grid.attach(t_name, 0, 0, 1, 1); // Attach at (0,0) with single width and height
+  grid.attach(c_type, 1, 0, 2, 1); // Attach at (1,0) with double width, single height
+  dialog->get_content_area()->add(grid);
+  dialog->add_button("Insert", Gtk::RESPONSE_OK);
+  dialog->add_button("Cancel", Gtk::RESPONSE_CANCEL);
+  int response;
+  dialog->show_all();
+  //dialog.run();
+
+  if(response = dialog->run() == Gtk::RESPONSE_OK)
   {
-    if(option_name.empty())
+    std::string text=c_type.get_active_text();
+    //std::cout<<text<<std::endl;
+    delete dialog;
+    Gtk::Dialog dialog_select{"Details", *this};
+    Gtk::Grid grid_select;
+    if(text=="RAM")
     {
-      option_name=get_string("Type the pheripheral");
-      continue;
+      Gtk::Label r_name{"How many GB"};
+      Gtk::SpinButton s_gb;
+      s_gb.set_range(2,128);
+      s_gb.set_increments(2,4);       // Single clicks change by 1, hold down quickly by 5
+      s_gb.set_value(8);
+      grid_select.attach(r_name, 0, 0, 1, 1);
+      grid_select.attach(s_gb, 1, 0, 2, 1);
+      //Label cost
+      Gtk::Label l_cost{"Cost"};
+      Gtk::Entry e_cost;
+      grid_select.attach(l_cost, 0, 1, 1, 1);
+      grid_select.attach(e_cost, 1, 1, 2, 1);
+
+      dialog_select.get_content_area()->add(grid_select);
+      dialog_select.add_button("Insert", Gtk::RESPONSE_OK);
+      dialog_select.add_button("Cancel", Gtk::RESPONSE_CANCEL);
+      int response;
+      dialog_select.show_all();
+
+      while((response = dialog_select.run()) == Gtk::RESPONSE_OK)
+      {
+
+          // Data validation: If the user doesn't enter a name for the animal, complain
+          if (e_cost.get_text().size() == 0 )
+          {
+            e_cost.set_text("*required*");
+            continue;
+          }
+          double cost=get_double(e_cost.get_text());
+          Ram ram{"Ram",cost,s_gb.get_value_as_int()};
+          //Options *option= ram;
+          store->add_option(ram);
+          break;
+      }
+
     }
-    else if(option_cost.empty())
+    else
     {
-      option_cost=get_string("What is the cost?");
-      continue;
-    }
+      Gtk::Label l_name{"Name"};
+      Gtk::Entry e_name;
+      grid_select.attach(l_name, 0, 0, 1, 1);
+      grid_select.attach(e_name, 1, 0, 2, 1);
+      //Label cost
+      Gtk::Label l_cost{"Cost"};
+      Gtk::Entry e_cost;
+      grid_select.attach(l_cost, 0, 1, 1, 1);
+      grid_select.attach(e_cost, 1, 1, 2, 1);
+
+      dialog_select.get_content_area()->add(grid_select);
+      dialog_select.add_button("Insert", Gtk::RESPONSE_OK);
+      dialog_select.add_button("Cancel", Gtk::RESPONSE_CANCEL);
+      int response;
+      dialog_select.show_all();
+      while((response = dialog_select.run()) == Gtk::RESPONSE_OK)
+      {
+
+          // Data validation: If the user doesn't enter a name for the animal, complain
+          if (e_cost.get_text().size() == 0 )
+          {
+            e_cost.set_text("*required*");
+            continue;
+          }
+          if (e_name.get_text().size() == 0 )
+          {
+            e_name.set_text("*required*");
+            continue;
+          }
+          double cost=get_double(e_cost.get_text());
+
+          Options option{e_name.get_text(),cost};
+          store->add_option(option);
+          break;
+        }
+      }
+
   }
-  while(option_name.empty() || option_cost.empty());
-  double cost=get_double(option_cost);
-  Options option{option_name,cost};
-  store->add_option(option);
-  set_msg("Added Option: "+ option_name);
+  else
+    delete dialog;
   on_view_peripheral_click();
 }
 void Mainwin::on_insert_desktop_click()
@@ -510,29 +597,71 @@ void Mainwin::on_insert_order_click()
 }
 void Mainwin::on_insert_customer_click()
 {
+  //Open a dialog
+  Gtk::Dialog dialog{"Insert Customer", *this};
+  //Label name
+  Gtk::Label l_name{"Name"};
+  Gtk::Entry e_name;
+  //Create a label to add name and text field
+  Gtk::HBox hb_name;
+  hb_name.pack_start(l_name);
+  hb_name.pack_start(e_name);
+  dialog.get_content_area()->pack_start(hb_name, Gtk::PACK_SHRINK, 0);
+  //Crate phone no label
+  Gtk::Label l_phone{"Phone No"};
+  Gtk::Entry e_phone;
+  //Horizatal box for phone no
+  Gtk::HBox hb_phone;
+  hb_phone.pack_start(l_phone);
+  hb_phone.pack_start(e_phone);
+  dialog.get_content_area()->pack_start(hb_phone, Gtk::PACK_SHRINK, 0);
+  //Create label for email
+  Gtk::Label l_email{"Email"};
+  Gtk::Entry e_email;
+  //Horizatal box for email
+  Gtk::HBox hb_email;
+  hb_email.pack_start(l_email);
+  hb_email.pack_start(e_email);
+  dialog.get_content_area()->pack_start(hb_email, Gtk::PACK_SHRINK, 0);
 
-  std::string name, email, phoneno;
-  do
+  //Add buttom of insert and Cancel
+  dialog.add_button("Insert", Gtk::RESPONSE_OK);
+  dialog.add_button("Cancel", Gtk::RESPONSE_CANCEL);
+
+  int response;
+  dialog.show_all();
+
+  //Loop until user enters the every field
+  while((response = dialog.run()) == Gtk::RESPONSE_OK)
   {
-    if(name.empty())
-    {
-      name=get_string("What is the customer name??");
-      continue;
-    }
-    else if(email.empty())
-    {
-      email=get_string("What is the email?");
-      continue;
-    }
-    else if(phoneno.empty())
-    {
-      phoneno=get_string("What is the phoneno?");
-      continue;
-    }
-  } while(name.size()==0 || email.empty() || phoneno.empty());
-  Customer customer{name, phoneno, email};
-  store->add_customer(customer);
-  set_msg("Added Customer: "+name);
+
+      // Data validation: If the user doesn't enter a name for the animal, complain
+      if (e_name.get_text().size() == 0 )
+      {
+        e_name.set_text("*required*");
+        continue;
+      }
+      else if(e_phone.get_text().size()==0)
+      {
+        e_phone.set_text("*required*");
+        continue;
+      }
+      else if(e_email.get_text().size()==0)
+      {
+        e_email.set_text("*required*");
+        continue;
+      }
+
+      // Otherwise, extract the information entered into the various widgets
+      Customer customer{e_name.get_text(), e_phone.get_text(), e_email.get_text()};
+
+       // Just display the information right back. In most applications, this is where you'd
+       //   create a new object and add it to a std::vector or other container
+       Gtk::MessageDialog{*this, "Successfully add customer "+e_name.get_text()}.run();
+       store->add_customer(customer);
+       break;
+  }
+  set_msg("Added Customer: "+e_name.get_text());
   on_view_customer_click();
 }
 void Mainwin::on_about_click()

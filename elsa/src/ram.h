@@ -10,6 +10,9 @@ class Ram : public Options
     virtual ~Ram();
     Ram(std::istream &ist);
     Ram(std::ostream &ost);
+    virtual std::ostream& print(std::ostream& ost) const override;
+    std::string to_string() const override;
+    void save(std::ostream &ost) override;
   protected:
     int _gb;
 };

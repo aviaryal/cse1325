@@ -7,6 +7,7 @@
 #include "desktop.h"
 #include "options.h"
 #include "customer.h"
+#include "ram.h"
 #include <fstream>
 
 
