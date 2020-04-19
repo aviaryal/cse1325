@@ -12,21 +12,22 @@ Ram::Ram(std::ostream &ost):Options(ost)
 {
   ost<<to_string()<<std::endl;
 }
-
+/*
 std::ostream& Ram::print(std::ostream& ost) const
 {
   ost << static_cast<Options>(*this) << ' ' << to_string();
   return ost;
 }
-
+*/
 
 std::string Ram::to_string() const
 {
-  return  std::to_string(_gb);
+  return "<b>Ram:</b>"+_name+ " " + std::to_string(_gb)+" GB\tCost: $"+std::to_string(_cost);
 }
 
 void Ram::save(std::ostream &ost)
 {
+  ost<< RAM_CHECK<<std::endl;
   ost<<_name<<std::endl;
   ost<<_cost<<std::endl;
   ost<<_gb<<std::endl;

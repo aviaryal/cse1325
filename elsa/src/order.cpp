@@ -28,9 +28,9 @@ std::ostream &operator<<(std::ostream &ost, const Order &order)
   double total= order.price();
   ost<<*(order._customer)<<"\n";
   for(auto v:order. _product)
-    ost<<*v<<"\n";
+    ost<<'\t'<<*v<<"\n";
 
-  ost<<std::to_string(total);
+  ost<<"\t<b>Grand total:</b> "<<std::to_string(total);
   return ost;
 }
 

@@ -13,20 +13,21 @@ double Options::cost()
 {
   return _cost;
 }
+
 std::string Options::to_string() const
 {
-  return _name+"\t\tCost: $"+std::to_string(_cost);
+  return _name+"\tCost: $"+std::to_string(_cost);
 }
-
+/*
 std::ostream& Options::print(std::ostream& ost) const
 {
   return ost<<to_string();
 }
-
+*/
 std::ostream &operator<<(std::ostream &ost, const Options &options)
 {
-  return options.print(ost);
-  //return ost<<options.to_string();
+  //return options.print(ost);
+  return ost<<options.to_string();
 }
 
 Options::Options (std::istream &ist)

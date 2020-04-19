@@ -180,27 +180,27 @@ void Mainwin::on_easter_egg_click() {
     c = Customer{"Tuck and Roll", "817-UFI-RED2", "circus@bugs.life"};     store->add_customer(c);
     c = Customer{"Tiana", "817-NOG-RIMM", "princess@lily.pad"};            store->add_customer(c);
 
-    Options o{"CPU: 2.6 GHz Xeon 6126T", 2423.47};         store->add_option(o);
-    o = Options{"CPU: 2.4 GHz Core i7-8565U", 388.0};      store->add_option(o);
-    o = Options{"CPU: 2.2 GHz AMD Opteron", 37.71};        store->add_option(o);
-    o = Options{"CPU: 300 MHz AM3351BZCEA30R ARM", 11.03}; store->add_option(o);
-    o = Options{"CPU: 240 MHz ColdFire MCF5", 17.33};      store->add_option(o);
+    Options *o= new Options{"CPU: 2.6 GHz Xeon 6126T", 2423.47};         store->add_option(*o);
+    o = new Options{"CPU: 2.4 GHz Core i7-8565U", 388.0};      store->add_option(*o);
+    o = new Options{"CPU: 2.2 GHz AMD Opteron", 37.71};        store->add_option(*o);
+    o = new Options{"CPU: 300 MHz AM3351BZCEA30R ARM", 11.03}; store->add_option(*o);
+    o = new Options{"CPU: 240 MHz ColdFire MCF5", 17.33};      store->add_option(*o);
 
-    o = Options{"2 GB RAM", 17.76};                        store->add_option(o);
-    o = Options{"4 GB RAM", 22.95};                        store->add_option(o);
-    o = Options{"8 GB RAM", 34.99};                        store->add_option(o);
-    o = Options{"16 GB RAM", 92.99};                       store->add_option(o);
-    o = Options{"32 GB RAM", 134.96};                      store->add_option(o);
-    o = Options{"64 GB RAM", 319.99};                      store->add_option(o);
+    o = new Options{"2 GB RAM", 17.76};                        store->add_option(*o);
+    o = new Options{"4 GB RAM", 22.95};                        store->add_option(*o);
+    o = new Options{"8 GB RAM", 34.99};                        store->add_option(*o);
+    o = new Options{"16 GB RAM", 92.99};                       store->add_option(*o);
+    o = new Options{"32 GB RAM", 134.96};                      store->add_option(*o);
+    o = new Options{"64 GB RAM", 319.99};                      store->add_option(*o);
 
-    o = Options{"0.5 TB SSD", 79.99};                      store->add_option(o);
-    o = Options{"1 TB SSD", 109.99};                       store->add_option(o);
-    o = Options{"2 TB SSD", 229.99};                       store->add_option(o);
-    o = Options{"4 TB SSD", 599.99};                       store->add_option(o);
+    o = new Options{"0.5 TB SSD", 79.99};                      store->add_option(*o);
+    o = new Options{"1 TB SSD", 109.99};                       store->add_option(*o);
+    o = new Options{"2 TB SSD", 229.99};                       store->add_option(*o);
+    o = new Options{"4 TB SSD", 599.99};                       store->add_option(*o);
 
-    o = Options{"1 TB PC Disk", 44.83};                    store->add_option(o);
-    o = Options{"2 TB Hybrid Disk", 59.99};                store->add_option(o);
-    o = Options{"4 TB Hybrid Disk", 93.98};                store->add_option(o);
+    o = new Options{"1 TB PC Disk", 44.83};                    store->add_option(*o);
+    o = new Options{"2 TB Hybrid Disk", 59.99};                store->add_option(*o);
+    o = new Options{"4 TB Hybrid Disk", 93.98};                store->add_option(*o);
 
     int desktop = store->new_desktop();
     store->add_option(0, desktop);
@@ -402,7 +402,9 @@ void Mainwin::on_insert_peripheral_click()
   Gtk::Grid grid;
   Gtk::Label t_name{"Type"};       // This labels the drop down
   Gtk::ComboBoxText c_type{true};  // Drop down with an Entry (true)
-  c_type.append("RAM");            // Add the predefined options
+  c_type.append("RAM");
+  c_type.append("Cpu");           // Add the predefined options
+  c_type.append("Disk");
   c_type.append("Other");
   c_type.set_active(0);
   grid.attach(t_name, 0, 0, 1, 1); // Attach at (0,0) with single width and height
@@ -452,9 +454,122 @@ void Mainwin::on_insert_peripheral_click()
             continue;
           }
           double cost=get_double(e_cost.get_text());
-          Ram ram{"Ram",cost,s_gb.get_value_as_int()};
+          Ram *ram = new Ram{"Ram",cost,s_gb.get_value_as_int()};
           //Options *option= ram;
-          store->add_option(ram);
+          store->add_option(*ram);
+          break;
+      }
+
+    }
+    else if(text=="Cpu")
+    {
+      Gtk::Label l_name{"Name"};
+      Gtk::Entry e_name;
+      grid_select.attach(l_name, 0, 0, 1, 1);
+      grid_select.attach(e_name, 1, 0, 2, 1);
+
+      Gtk::Label r_name{"How many GHz"};
+      Gtk::SpinButton s_gb;
+      s_gb.set_range(1.0,5.0);
+      s_gb.set_increments(0.2,0.4);
+      s_gb.set_digits(2);
+      s_gb.set_value(2.0);
+      grid_select.attach(r_name, 0, 1, 1, 1);
+      grid_select.attach(s_gb, 1, 1, 2, 1);
+      //Label cost
+      Gtk::Label l_cost{"Cost"};
+      Gtk::Entry e_cost;
+      grid_select.attach(l_cost, 0, 2, 1, 1);
+      grid_select.attach(e_cost, 1, 2, 2, 1);
+
+      dialog_select.get_content_area()->add(grid_select);
+      dialog_select.add_button("Insert", Gtk::RESPONSE_OK);
+      dialog_select.add_button("Cancel", Gtk::RESPONSE_CANCEL);
+      int response;
+      dialog_select.show_all();
+
+      while((response = dialog_select.run()) == Gtk::RESPONSE_OK)
+      {
+
+          // Data validation: If the user doesn't enter a name for the animal, complain
+          if (e_cost.get_text().size() == 0 )
+          {
+            e_cost.set_text("*required*");
+            continue;
+          }
+          if(e_name.get_text().size() == 0)
+          {
+            e_name.set_text("*required*");
+            continue;
+          }
+          double cost=get_double(e_cost.get_text());
+          //Ram *ram = new Ram{"Ram",cost,s_gb.get_value_as_int()};
+          //Options *option= ram;
+          Cpu *cpu=new Cpu{e_name.get_text(),cost,s_gb.get_value()};
+          store->add_option(*cpu);
+          break;
+      }
+
+
+    }
+    else if(text=="Disk")
+    {
+      Gtk::Label l_name{"Name"};
+      Gtk::Entry e_name;
+      grid_select.attach(l_name, 0, 0, 1, 1);
+      grid_select.attach(e_name, 1, 0, 2, 1);
+
+
+      Gtk::Label l_size{"Size"};
+      Gtk::Entry e_size;
+
+      Gtk::ComboBoxText c_dsize{true};  // Drop down with an Entry (true)
+      c_dsize.append("GB");
+      c_dsize.append("TB");           // Add the predefined options
+      c_dsize.set_active(0);
+
+      Gtk::ComboBoxText c_dtype{true};  // Drop down with an Entry (true)
+      c_dtype.append("SSD");
+      c_dtype.append("HDD");           // Add the predefined options
+      c_dtype.set_active(0);
+
+      grid_select.attach(l_size, 0, 1, 1, 1); //Attach size
+      grid_select.attach(e_size, 1, 1, 1, 1); // attach entry box
+      grid_select.attach(c_dsize, 3, 1, 1, 1);//attach GB/TB
+      grid_select.attach(c_dtype, 4, 1, 1, 1);//attach type
+      //Label cost
+      Gtk::Label l_cost{"Cost"};
+      Gtk::Entry e_cost;
+      grid_select.attach(l_cost, 0, 2, 1, 1);
+      grid_select.attach(e_cost, 1, 2, 2, 1);
+
+      dialog_select.get_content_area()->add(grid_select);
+      dialog_select.add_button("Insert", Gtk::RESPONSE_OK);
+      dialog_select.add_button("Cancel", Gtk::RESPONSE_CANCEL);
+      int response;
+      dialog_select.show_all();
+
+      while((response = dialog_select.run()) == Gtk::RESPONSE_OK)
+      {
+
+          // Data validation: If the user doesn't enter a name for the animal, complain
+          if (e_cost.get_text().size() == 0 )
+          {
+            e_cost.set_text("*required*");
+            continue;
+          }
+          if(e_name.get_text().size() == 0)
+          {
+            e_name.set_text("*required*");
+            continue;
+          }
+          double cost=get_double(e_cost.get_text());
+          //c_type.get_active_text();
+          //Ram *ram = new Ram{"Ram",cost,s_gb.get_value_as_int()};
+          std::string size= e_size.get_text()+" "+c_dsize.get_active_text()+" "+c_dtype.get_active_text();
+          std::cout << size << '\n';
+          Disk *disk=new Disk{e_name.get_text(),cost,size};
+          store->add_option(*disk);
           break;
       }
 
@@ -492,8 +607,8 @@ void Mainwin::on_insert_peripheral_click()
           }
           double cost=get_double(e_cost.get_text());
 
-          Options option{e_name.get_text(),cost};
-          store->add_option(option);
+          Options *option=new Options{e_name.get_text(),cost};
+          store->add_option(*option);
           break;
         }
       }
@@ -540,9 +655,11 @@ void Mainwin::on_insert_desktop_click()
   int desktop = store->new_desktop();
   while(true && store->num_options()>0)
   {
+      //
       std::ostringstream oss;
       std::string option_number;
       oss << store->desktop(desktop) << "\nAdd which peripheral (-1 when done)? ";
+
       option_number=get_string(oss.str());
       if(option_number.empty()) continue;
       int option=get_int(option_number);

@@ -58,7 +58,7 @@ std::ostream &operator<<(std::ostream &ost, Desktop &desktop)
 {
   ost<<"Destop includes:\n";
   for(auto v:desktop._options)
-    ost<<*v<<"\n";
-  ost<<"The total cost is: "<<std::to_string(desktop.price());
+    ost<<'\t'<<*v<<"\n";
+  ost<<"\tThe total cost is: "<<std::to_string(desktop.price());
   return ost;
 }

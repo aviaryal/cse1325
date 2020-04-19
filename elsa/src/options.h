@@ -14,7 +14,7 @@ class Options
     Options(std::istream &ist);
     Options(std::ostream &ost);
     virtual void save(std::ostream &ost);
-    virtual std::ostream& print(std::ostream& ost) const;
+    //virtual std::ostream& print(std::ostream& ost) const;
     virtual std::string to_string() const ;
     friend std::ostream &operator<<(std::ostream &ost, const Options &options);
   protected:

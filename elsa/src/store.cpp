@@ -26,9 +26,28 @@ Store::Store(std::istream &ist)
   //Load options
   ist>>vsize;
   ist.ignore(32767, '\n');
-
+  std::string check;
   while(vsize--)
-    _options.push_back(new Options{ist});
+  {
+    getline(ist,check);
+    if(check==RAM_CHECK)
+    {
+      _options.push_back(new Ram{ist});
+    }
+    else if(check==CPU_CHECK)
+    {
+      _options.push_back(new Cpu{ist});
+    }
+    else if(check==DISK_CHECK)
+    {
+      _options.push_back(new Disk{ist});
+    }
+    else
+    {
+      _options.push_back(new Options{ist});
+    }
+
+  }
   if(!ist)
     throw std::runtime_error{"Bad Customer Data"};
 
@@ -99,7 +118,8 @@ Customer &Store::customer(int index)
 }
 void Store::add_option(Options &options)
 {
-  _options.push_back(new Options{options});
+  //_options.push_back(new Options{options});
+  _options.push_back(&options);
 }
 int Store::num_options()
 {

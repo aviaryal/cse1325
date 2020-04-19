@@ -8,6 +8,8 @@
 #include "options.h"
 #include "customer.h"
 #include "ram.h"
+#include "cpu.h"
+#include "disk.h"
 #include <fstream>
 
 

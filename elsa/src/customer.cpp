@@ -5,7 +5,7 @@ Customer::Customer(std::string name, std::string phone, std::string email):_name
 }
 std::ostream &operator<<(std::ostream &ost, const Customer &customer)
 {
-  return ost<<"Name: "<<customer._name<<" Phone: "<<customer._phone<<" email: "<<customer._email;
+  return ost<<"<b>Name:</b> "<<customer._name<<"<b> Phone:</b> "<<customer._phone<<" <b>email:</b>"<<customer._email;
 }
 Customer::Customer(std::istream &ist)
 {
