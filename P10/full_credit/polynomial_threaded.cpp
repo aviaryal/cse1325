@@ -3,6 +3,7 @@
 #include <cmath>
 #include <thread>
 #include <mutex>
+#include <algorithm>
 std::mutex m;
 Polynomial::Polynomial() { }
 Polynomial::Polynomial(std::istream& ist) {
@@ -32,21 +33,28 @@ double Polynomial::operator()(double x) {
 // Clear the roots and invoke recursive solution search
 //   nthreads is the number of threads requested
 //   tid is a thread id - useful for logger.h messages
+
 void Polynomial::solve(double min, double max, int nthreads, double slices, double precision) {
     _roots = {};
-    //slices=slices/nthreads;
-    double modify_max=min+(max-min)/slices;
-    double modify_min=max-(max-min)/slices;
+
+    double ranges=(max-min)/nthreads;
+    //double modify_max=min+(max-min)/slices;
+    //double modify_min=max-(max-min)/slices;
+    max=ranges;
     int i=0;
     std::thread t[nthreads];
-    Polynomial p=*this;
-
+    //Polynomial p;
     for(i=0;i<nthreads;i++)
     {
-      t[i]=std::thread{[=]{this->solve_recursive(modify_max, modify_min, i, slices, precision);}};
+      //_roots={};
+      t[i]=std::thread{[&]{this->solve_recursive(min,max, i, slices/nthreads, precision);}};
+      min+=ranges;
+      max+=ranges;
       //t[i]=std::thread(&Polynomial::solve_recursivemodify_max,modify_min,i,slices,precision);
-      modify_max+=nthreads;
-      modify_min+=nthreads;
+      //t[i]=std::thread{[&]{this->solve_recursive(modify_max, modify_min, i, slices/nthreads, precision);}};
+      //modify_max+=nthreads;
+      //modify_min+=nthreads;
+
     }
 
     for(i=0;i<nthreads;i++)
@@ -67,18 +75,24 @@ void Polynomial::solve_recursive(double min, double max, int tid, double slices,
 
     while(x1 < max) {
         y2 = f(x2);
+
         if(std::signbit(y1) != std::signbit(y2)) {
             if((abs(f(x1+x2)/2) > precision) && ((x2 - x1) > precision) && (recursions < 20)) {
                 solve_recursive(x1, x2, tid, std::min(slices, (x2-x1)/precision), precision, recursions+1); // recurse for more precision
-            } else {
+            }
+            else
+            {
                 m.lock();
-                _roots.push_back((x1+x2)/2);
+                //if(!std::count(_roots.begin(),_roots.end(),(x1+x2)/2))
+                  _roots.push_back((x1+x2)/2);
                 m.unlock();
             }
         }
+
         x1 = x2;
         x2 = x1 + delta;
         y1 = y2;
+
     }
 }
 

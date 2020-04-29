@@ -1,5 +1,5 @@
-QUESTION 1: Which value of slices did you select for your machine to solve the polynomial with 1 thread with at least a 30 second runtime: 
-
+QUESTION 1: Which value of slices did you select for your machine to solve the polynomial with 1 thread with at least a 30 second runtime:
+default value of provided on the cse1325-prof/P10/full_credit
 
 QUESTION 2: Provide the output of ``time polyb nn`` (or the improved version in the lecture video, if you prefer) for the following values of nn threads shown below:
 
@@ -13,11 +13,15 @@ sys	0m0.012s
 YOUR Timing:
 
 Without threads:
-
-
+real	0m4.011s
+user	0m3.546s
+sys	0m0.396s
 
 
 With 2 threads:
+real	0m2.185s
+user	0m3.731s
+sys	0m0.417s
 
 
 
@@ -65,9 +69,3 @@ QUESTION 3: Does adding more threads continue to speed up the program? Do more t
 
 
 QUESTION 4: Does adding more threads increase the "system load", or is it constant regardless of the number of threads?  Why?
-
-
-
-
-
-
