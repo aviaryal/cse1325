@@ -39,15 +39,16 @@ void Polynomial::solve(double min, double max, int nthreads, double slices, doub
     double modify_min=max-(max-min)/slices;
     int i=0;
     std::thread t[nthreads];
-    Polynomial p;
-    //Polynomial f = *this;
-    //int recurse=1;
+    Polynomial p=*this;
+
     for(i=0;i<nthreads;i++)
     {
-      t[i]=std::thread{[&]{p.solve_recursive(modify_max, modify_min, i, slices, precision);}};
+      t[i]=std::thread{[=]{this->solve_recursive(modify_max, modify_min, i, slices, precision);}};
+      //t[i]=std::thread(&Polynomial::solve_recursivemodify_max,modify_min,i,slices,precision);
       modify_max+=nthreads;
       modify_min+=nthreads;
     }
+
     for(i=0;i<nthreads;i++)
     {
       t[i].join();
