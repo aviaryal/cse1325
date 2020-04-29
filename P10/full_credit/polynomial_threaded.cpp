@@ -1,6 +1,9 @@
+
 #include "polynomial.h"
 #include <cmath>
-
+#include <thread>
+#include <mutex>
+std::mutex m;
 Polynomial::Polynomial() { }
 Polynomial::Polynomial(std::istream& ist) {
     int tsize; ist >> tsize;
@@ -31,9 +34,26 @@ double Polynomial::operator()(double x) {
 //   tid is a thread id - useful for logger.h messages
 void Polynomial::solve(double min, double max, int nthreads, double slices, double precision) {
     _roots = {};
+    //slices=slices/nthreads;
     double modify_max=min+(max-min)/slices;
     double modify_min=max-(max-min)/slices;
-    solve_recursive(min, max, 1, slices, precision);
+    int i=0;
+    std::thread t[nthreads];
+    Polynomial p;
+    //Polynomial f = *this;
+    //int recurse=1;
+    for(i=0;i<nthreads;i++)
+    {
+      t[i]=std::thread{[&]{p.solve_recursive(modify_max, modify_min, i, slices, precision);}};
+      modify_max+=nthreads;
+      modify_min+=nthreads;
+    }
+    for(i=0;i<nthreads;i++)
+    {
+      t[i].join();
+    }
+
+
 }
 // (Internal) recursive search for polynomial solutions
 void Polynomial::solve_recursive(double min, double max, int tid, double slices, double precision, int recursions) {
@@ -50,7 +70,9 @@ void Polynomial::solve_recursive(double min, double max, int tid, double slices,
             if((abs(f(x1+x2)/2) > precision) && ((x2 - x1) > precision) && (recursions < 20)) {
                 solve_recursive(x1, x2, tid, std::min(slices, (x2-x1)/precision), precision, recursions+1); // recurse for more precision
             } else {
+                m.lock();
                 _roots.push_back((x1+x2)/2);
+                m.unlock();
             }
         }
         x1 = x2;
