@@ -4,8 +4,8 @@
 #include "items.h"
 #include <vector>
 #include <iterator>
-typedef Item::iterator iterator;
-typedef Item::const_iterator const_iterator;
+//typedef Item::iterator iterator;
+//typedef Item::const_iterator const_iterator;
 class Cart
 {
   public:
@@ -15,12 +15,14 @@ class Cart
     Cart &operator=(const Cart &cart);
     void add_item(Item &item);
     double cost();
-
-    iterator begin();
-    iterator end();
+    typedef std::vector<Item*>::iterator iterator;
+    typedef std::vector<Item*>::const_iterator const_iterator;
+    std::vector<Item*>::iterator begin();
+    std::vector<Item*>::iterator end();
   private:
     std::string _customer;
     std::vector<Item*> _items;
+
 
 };
 
