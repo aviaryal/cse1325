@@ -24,13 +24,15 @@ int main()
   file.close();
 
   std::cout<<"Register items"<<std::endl;
-  Item *check=*walmart.begin();
-
-  for(Item *v=*walmart.begin();v!=*walmart.end();v++)
+  //Item *check=*walmart.begin();
+  std::vector<Item*>::iterator it;
+  for(it=walmart.begin();it!=walmart.end();++it)
   {
-    std::cout<<*v;
+    std::cout<<**it<<std::endl;
   }
-  
+  std::cout<<"----------------------------\n";
+  std::cout<<"$\t"<<walmart.cost()<<"    Total cost\n";
+
 
 
 }
